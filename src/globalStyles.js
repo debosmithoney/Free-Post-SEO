@@ -1,6 +1,6 @@
-import {createGlobalStyle} from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
-const GlobalStyle =createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,800;1,200;1,900&display=swap');
 
  *{
