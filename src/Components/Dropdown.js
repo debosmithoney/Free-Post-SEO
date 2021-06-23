@@ -71,6 +71,7 @@ const DropdownLink = styled(Link)`
 const Dropdown = ({isOpen,toggle}) => {
     const [openPopup, setOpenPopup] = useState(false); 
     return (
+        <>
         <DropDownContainer isOpen={isOpen} onClick={toggle}>
             <Icon onClick={toggle}>
                 <CloseIcon/>
@@ -86,13 +87,14 @@ const Dropdown = ({isOpen,toggle}) => {
             </DropdowMenu>
 
             </DropdownWrapper>
+            </DropDownContainer>
             <PopUp
                 openPopup = {openPopup}
                 setOpenPopup = {setOpenPopup}
             >
             <Login/>
             </PopUp>
-        </DropDownContainer>
+        </>
     )
 }
 

@@ -4,7 +4,9 @@ import SuSvg from  '../Svg/undraw_authentication_fsn5.svg';
 import SiSvg from '../Svg/undraw_unlock_24mb.svg';
 import fpSvg from '../Svg/undraw_forgot_password_gi2d.svg'
 import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import { Button, FormControl } from '@material-ui/core';
+
+
 
 // color: #6C63FF
 
@@ -71,6 +73,7 @@ function Login() {
             </LeftSide>
             <RightSide >
             {showlog === "signin" && <>
+                <FormControl>
                 <SignTab >
                     <h2 >Sign in</h2>
                 </SignTab>
@@ -81,12 +84,14 @@ function Login() {
                     <Button color="primary" style={{paddingInline:"10px"}} onClick={() => setShowlog('forgot')}>Forgot Password</Button>
                     <Button color="primary" onClick={changeState}>Sign Up</Button>
                 </Bottom>
+                </FormControl>
                 </>}
                 {showlog === 'signup' && <>
+                <FormControl>
                     <SignTab >
                         <h2 >Sign Up</h2>
                     </SignTab>
-                    <TextField  id="standard-required" label="Name"  color="whitesmoke" style={{paddingBottom:"5px"}}/>
+                    <TextField  id="standard-required" type="text" label="Name"  color="whitesmoke" style={{paddingBottom:"5px"}}/>
                     <TextField  id="standard-required" label="Email" type="email"  color="whitesmoke" style={{paddingBottom:"5px"}}/>
                     <TextField  id="standard-password-input" label="Password" type="password" autoComplete="current-password"  style={{paddingBottom:"20px"}}/>
                     <TextField  id="standard-password-input" label="Re-enter Password" type="password" autoComplete="current-password"  style={{paddingBottom:"20px"}}/>
@@ -94,8 +99,10 @@ function Login() {
                     <Bottom>
                         <Button color="primary" style={{paddingInline:"10px"}} onClick={() => setShowlog('signin')}>Already have account?</Button>
                     </Bottom>
+                    </FormControl>
                     </>}
                 {showlog === 'forgot' && <>
+                <FormControl>
                     <SignTab >
                         <h2>Enter your registered email</h2>
                     </SignTab>
@@ -104,6 +111,7 @@ function Login() {
                     <Bottom>
                         <Button color="primary" style={{paddingInline:"10px"}} onClick={() => setShowlog('signin')}>remember your password</Button>
                     </Bottom>
+                    </FormControl>
                 </>}
             </RightSide>
         </Front>

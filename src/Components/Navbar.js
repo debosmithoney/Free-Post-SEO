@@ -39,6 +39,8 @@ const NavLink = css`
 const NavBars = styled(FaBars)`
  display: none;
  cursor:pointer;
+ font-size:24px;
+ margin-right:10px;
 
  @media screen and (max-width: 768px){
      display:block;
@@ -101,6 +103,7 @@ const Navbar = ({toggle}) => {
 
     const [navbar,setNavbar]=useState("transparent");
     const [color,setColor]=useState("#000");
+
 
     const ChangeBackground = () => {
         if(window.scrollY >= 128){

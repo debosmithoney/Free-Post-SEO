@@ -34,7 +34,7 @@ const Column = styled.div`
       text-align: center;
 
       & h1{
-          margin-left:40px;
+          margin-left: 40px;
       }
   }
 `;

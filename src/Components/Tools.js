@@ -9,8 +9,11 @@ const Section = styled.div`
  width:100%;
  height:100%;
  padding: 4rem 1rem;
+ scroll-snap-align: start;
 `;
 const Container = styled.div`
+ scroll-snap-type:y mandatory;
+ height:100%;
  background:#ffffff;
  padding: 3rem calc((100vw - 1300px)/ 2);
  display: grid;
@@ -59,8 +62,8 @@ const ColumnRight = styled.div`
       object-fit:cover;
 
       @media screen and (max-width:768px){
-          width:90%;
-          height:90%;
+          width:100%;
+          height:100%;
       }
   }
 `;
