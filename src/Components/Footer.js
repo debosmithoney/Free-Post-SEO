@@ -12,44 +12,42 @@ const Container = styled.div`
 	padding: 80px 60px;
 	background: #000;
 	bottom: 0;
+	@media (max-width: 768px) {
+		padding: 40px 10px;
+	}
 `;
 const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	max-width: 1000px;
+	width: 100%;
 	margin: 0 auto;
 `;
 const Column = styled.div`
 	display: flex;
 	flex-direction: column;
 	text-align: left;
-	margin-left: 60px;
+	margin: 0 auto;
 
 	& h1 {
 		color: #fff;
 		font-size: 32px;
 		text-align: center;
 		width: 300px;
-		margin-bottom: 40px;
+		margin-bottom: 80px;
 	}
 	@media (max-width: 768px) {
-		margin-left: 0;
 		text-align: center;
-
-		& h1 {
-			margin-left: 40px;
-		}
 	}
 `;
 
 const Row = styled.div`
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	grid-template-columns: repeat(4, 1fr);
 	grid-gap: 20px;
 
 	@media (max-width: 768px) {
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		grid-template-columns: repeat(2, 1fr);
 	}
 `;
 const Links = styled(Link)`
@@ -98,10 +96,9 @@ const Footer = () => {
 		<Container>
 			<Wrapper>
 				<Row>
-					<Column>
+					<Column style={{ gridColumn: "1/3" }}>
 						<h1>Let's get you a Better Internet Experience 🚀</h1>
 					</Column>
-					<Column></Column>
 					<Column>
 						<Title>Contact Us</Title>
 						<Links

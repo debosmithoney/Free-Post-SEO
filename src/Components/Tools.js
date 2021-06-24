@@ -89,7 +89,7 @@ function Tools() {
 					</Button>
 				</ColumnLeft>
 				<ColumnRight>
-					<img src={USSvg} alt="" />
+					<img src={USSvg} alt="" style={{ width: "95%" }} />
 				</ColumnRight>
 			</Container>
 			<Container style={{ background: "#000" }}>

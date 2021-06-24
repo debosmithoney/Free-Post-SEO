@@ -41,7 +41,7 @@ const NavBars = styled(FaBars)`
 	font-size: 24px;
 	margin-right: 10px;
 
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 992px) {
 		display: block;
 		color: black;
 	}
@@ -54,14 +54,14 @@ const Logo = styled(Link)`
 	font-size: 1.4rem;
 	font-weight: 600;
 	text-decoration: none;
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 992px) {
 		padding-left: 10px;
 	}
 `;
 
 const NavMenu = styled.div`
 	display: flex;
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 992px) {
 		display: none;
 	}
 `;
