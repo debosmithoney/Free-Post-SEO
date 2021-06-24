@@ -56,13 +56,9 @@ const ColumnRight = styled.div`
 	}
 
 	img {
-		max-height: 100%;
-		object-fit: cover;
-
-		@media screen and (max-width: 768px) {
-			width: 100%;
-			height: 100%;
-		}
+		height: 100%;
+		width: 100%;
+		object-fit: fit;
 	}
 `;
 
@@ -89,7 +85,7 @@ function Tools() {
 					</Button>
 				</ColumnLeft>
 				<ColumnRight>
-					<img src={USSvg} alt="" style={{ width: "95%" }} />
+					<img src={USSvg} alt="" />
 				</ColumnRight>
 			</Container>
 			<Container style={{ background: "#000" }}>
@@ -112,7 +108,7 @@ function Tools() {
 					</Button>
 				</ColumnLeft>
 				<ColumnRight reverse="false">
-					<img src={WsSvg} alt="" style={{ width: "95%" }} />
+					<img src={WsSvg} alt="" />
 				</ColumnRight>
 			</Container>
 			<Container>
@@ -135,7 +131,7 @@ function Tools() {
 					</Button>
 				</ColumnLeft>
 				<ColumnRight>
-					<img src={YTSvg} alt="" style={{ width: "95%" }} />
+					<img src={YTSvg} alt="" />
 				</ColumnRight>
 			</Container>
 		</Section>
