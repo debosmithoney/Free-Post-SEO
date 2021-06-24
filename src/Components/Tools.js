@@ -88,7 +88,7 @@ function Tools() {
 					<img src={USSvg} alt="" />
 				</ColumnRight>
 			</Container>
-			<Container style={{ background: "#000" }}>
+			<Container style={{ background: "transparent" }}>
 				<ColumnLeft reverse="false">
 					<h1>Web Scrapper 🔎</h1>
 					<p>Get the Glimpse of the Webpage</p>
@@ -114,7 +114,7 @@ function Tools() {
 			<Container>
 				<ColumnLeft>
 					<h1>Youtube Song Downloader</h1>
-					<p></p>
+					<p>Get the Trending Songs 🕺💃</p>
 					<TextField
 						id="standard-required"
 						type="url"

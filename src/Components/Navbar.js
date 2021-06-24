@@ -25,7 +25,7 @@ const Nav = styled.div`
 	}
 `;
 const NavLink = css`
-	color: black;
+	color: #f5f5f5;
 	display: inline-block;
 	padding: 5px 20px;
 	position: relative;
@@ -43,17 +43,18 @@ const NavBars = styled(FaBars)`
 
 	@media screen and (max-width: 992px) {
 		display: block;
-		color: black;
+		color: #f5f5f5;
 	}
 `;
 const Logo = styled(Link)`
 	padding: 5px 20px;
 	padding-left: 80px;
-	color: black;
+	color: #f5f5f5;
 	font-style: italic;
 	font-size: 1.4rem;
 	font-weight: 600;
 	text-decoration: none;
+	text-shadow: 0px 0px 20px rgba(0,0,0,0.9);
 	@media screen and (max-width: 992px) {
 		padding-left: 10px;
 	}
@@ -84,6 +85,7 @@ const NavMenuLinks = styled(Link)`
 	&:hover {
 		transform: scale(1.05);
 		transition: width 0.3s ease 0s;
+		text-shadow: 0px 0px 20px rgba(0,0,0,0.9);
 	}
 
 	&:hover:after {
@@ -97,15 +99,12 @@ const NavMenuLinks = styled(Link)`
 
 const Navbar = ({ toggle }) => {
 	const [navbar, setNavbar] = useState("transparent");
-	const [color, setColor] = useState("#000");
 
 	const ChangeBackground = () => {
 		if (window.scrollY >= 128) {
 			setNavbar("#6C63FF");
-			setColor("#F5F5F5");
 		} else {
 			setNavbar("transparent");
-			setColor("#000");
 		}
 	};
 
@@ -115,23 +114,23 @@ const Navbar = ({ toggle }) => {
 
 	return (
 		<Nav style={{ background: `${navbar}` }}>
-			<Logo to="/" style={{ color: `${color}` }}>
+			<Logo to="/" >
 				Free Post SEO
 			</Logo>
-			<NavBars onClick={toggle} style={{ color: `${color}` }} />
+			<NavBars onClick={toggle}  />
 			<NavMenu>
 				{menuData.map((item, index) => (
 					<NavMenuLinks
 						to={item.link}
 						key={index}
-						style={{ color: `${color}` }}
+						
 					>
 						{item.title}
 					</NavMenuLinks>
 				))}
 				<NavMenuLinks
 					onClick={() => setOpenPopup(true)}
-					style={{ color: `${color}` }}
+					
 				>
 					Login / Register
 				</NavMenuLinks>

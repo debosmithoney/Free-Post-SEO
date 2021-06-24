@@ -4,7 +4,7 @@ import SuSvg from "../Svg/undraw_authentication_fsn5.svg";
 import SiSvg from "../Svg/undraw_unlock_24mb.svg";
 import fpSvg from "../Svg/undraw_forgot_password_gi2d.svg";
 import TextField from "@material-ui/core/TextField";
-import { Button, FormControl } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 // color: #6C63FF
 
