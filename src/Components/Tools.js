@@ -1,9 +1,19 @@
 import { Button, FormControl, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import styled from "styled-components";
+import USSvgGo from "../Svg/Go.svg";
 import USSvg from "../Svg/undraw_link_shortener_mvf6.svg";
 import WsSvg from "../Svg/undraw_heatmap_uyye.svg";
 import YTSvg from "../Svg/undraw_Download_re_li50.svg";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 const Section = styled.div`
   width: 100%;
@@ -66,10 +76,14 @@ const ColumnRight = styled.div`
 const Bottom = styled.div`
   display: flex;
   padding-top: 15px;
+  justify-content: space-between;
 `;
 
 function Tools() {
+  const classes = useStyles();
+
   const [shortenerButtons, setShortenerButtons] = useState(false);
+  const [webScrapper, setWebScrapper] = useState(false);
   const [isCopied, setCopy] = useState("Copy Link");
 
   const shortener = async (e) => {
@@ -100,11 +114,19 @@ function Tools() {
       const data = await response.json();
 
       console.log(data);
-      input.value = `${window.location.host}/url/${data.urlid}`;
-      input.setAttribute("readonly", "true");
-      e.target
-        .querySelector("button[type=submit]")
-        .setAttribute("disabled", "true");
+      if (!shortenerButtons) {
+        input.value = `${window.location.host}/url/${data.urlid}`;
+        input.setAttribute("readonly", "true");
+        e.target
+          .querySelector("button[type=submit]")
+          .setAttribute("disabled", "true");
+      } else {
+        input.value = "";
+        input.setAttribute("readonly", "false");
+        e.target
+          .querySelector("button[type=submit]")
+          .setAttribute("disabled", "false");
+      }
 
       setShortenerButtons(true);
     } catch (error) {
@@ -137,6 +159,7 @@ function Tools() {
 
       const data = await response.json();
 
+      setWebScrapper(true);
       console.log(data);
     } catch (error) {
       console.error(error);
@@ -157,8 +180,8 @@ function Tools() {
 
   const redirect = () => {
     const url = document.querySelector("input[name=url]").value;
-    window.open(url, "_blank");
-  }
+    window.open(`${url.startsWith("http") ? "" : "http://"}${url}`);
+  };
 
   return (
     <Section>
@@ -175,70 +198,107 @@ function Tools() {
                 label="Enter your URL"
                 style={{ paddingBottom: "15px" }}
               />
-              {!shortenerButtons && (<Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={{ paddingInline: "10px" }}
-              >
-                Shorten it 🚀
-              </Button>)}
+              {!shortenerButtons && (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingInline: "10px" }}
+                >
+                  Shorten it 🚀
+                </Button>
+              )}
               {shortenerButtons && (
                 <>
                   <Bottom>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ paddingInline: "10px" }}
-                      onClick={redirect}
-                    >
-                      Redirect ↗
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ paddingInline: "10px" }}
-                      onClick={copy}
-                    >
-                      {isCopied} 🔗
-                    </Button>
+                    <div className={classes.root}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ paddingInline: "10px" }}
+                        onClick={redirect}
+                      >
+                        Redirect ↗
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ paddingInline: "10px" }}
+                        onClick={copy}
+                      >
+                        {isCopied} 🔗
+                      </Button>
+                    </div>
                   </Bottom>
+                  <Button
+                    color="primary"
+                    style={{ padding: "10px" }}
+                    onClick={(e) => setShortenerButtons(false)}
+                  >
+                    reset
+                  </Button>
                 </>
               )}
             </FormControl>
           </form>
         </ColumnLeft>
         <ColumnRight>
-          <img src={USSvg} alt="" />
+          {!shortenerButtons && <img src={USSvg} alt="" />}
+          {shortenerButtons && <img src={USSvgGo} alt="" />}
         </ColumnRight>
       </Container>
       <Container style={{ background: "transparent" }}>
-        <ColumnLeft reverse="false">
-          <h1>Bookmarker 🔎</h1>
-          <p>Get the Glimpse of the Webpage</p>
-          <form onSubmit={scrapurl}>
-            <FormControl>
-              <TextField
-                id="scrapurl"
-                name="url"
-                type="url"
-                label="Enter your URL"
-                style={{ paddingBottom: "15px" }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={{ paddingInline: "10px" }}
-              >
-                Mark it ✔
+        {!webScrapper && (
+          <>
+            <ColumnLeft reverse="false">
+              <h1>Bookmarker 🔎</h1>
+              <p>Get the Glimpse of the Webpage</p>
+              <form onSubmit={scrapurl}>
+                <FormControl>
+                  <TextField
+                    id="scrapurl"
+                    name="url"
+                    type="url"
+                    label="Enter your URL"
+                    style={{ paddingBottom: "15px" }}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    style={{ paddingInline: "10px" }}
+                  >
+                    Mark it ✔
+                  </Button>
+                </FormControl>
+              </form>
+            </ColumnLeft>
+            <ColumnRight reverse="false">
+              <img src={WsSvg} alt="" />
+            </ColumnRight>
+          </>
+        )}
+        {webScrapper && (
+          <>
+            
+            <ColumnLeft reverse="false">
+            <Button color="secondary" style={{top:"0", right:"0"}} onClick={() => setWebScrapper(false)}>
+              X
+            </Button>
+              <h1>Title of the Page</h1>
+              <p>Description</p>
+              <p>url</p>
+              <Button color="primary" variant="contained">
+                Go to URL
               </Button>
-            </FormControl>
-          </form>
-        </ColumnLeft>
-        <ColumnRight reverse="false">
-          <img src={WsSvg} alt="" />
-        </ColumnRight>
+            </ColumnLeft>
+            <ColumnRight reverse="false">
+
+              Image got from the WebPage
+              <img src={WsSvg} alt="" />
+            </ColumnRight>
+          </>
+        )}
       </Container>
       <Container>
         <ColumnLeft>
