@@ -101,18 +101,10 @@ const Footer = () => {
 					</Column>
 					<Column>
 						<Title>Contact Us</Title>
-						<Links
-							onClick={(e) => {
-								window.open("tel:1234567890");
-							}}
-						>
+						<Links onClick={() => window.open("tel:1234567890", "_self")}>
 							+91 1234569870
 						</Links>
-						<Links
-							onClick={(e) => {
-								window.open("mailto:any@any.com");
-							}}
-						>
+						<Links onClick={() => window.open("mailto:any@any.com", "_self")}>
 							any@any.com
 						</Links>
 					</Column>
