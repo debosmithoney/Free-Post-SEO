@@ -1,11 +1,17 @@
 import { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Redirect,
+} from "react-router-dom";
 import { Circle } from "better-react-spinkit";
 
 import "./App.css";
 import ScrollToTop from "./Components/ScrollToTop";
 import Home from "./Pages/Home";
 import styled from "styled-components";
+import SVG404 from "../src/Svg/undraw_page_not_found_su7k.svg";
 
 const Container = styled.div`
 	display: flex;
@@ -13,7 +19,38 @@ const Container = styled.div`
 	align-items: center;
 `;
 
-const Redirect = ({ match }) => {
+const Centered = styled.div`
+	margin-top: 20vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	& img {
+		width: 50%;
+		animation: beat 2s infinite;
+	}
+
+	@keyframes beat {
+		0% {
+			transform: scale(1);
+		}
+		40% {
+			transform: scale(0.95);
+		}
+		50% {
+			transform: scale(1.1);
+		}
+		60% {
+			transform: scale(0.95);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+`;
+
+const GetURL = ({ match }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -46,13 +83,11 @@ const Redirect = ({ match }) => {
 	);
 };
 
-const NotFound = () => {
+const Error404 = () => {
 	return (
-		<center>
-			<Container>
-				<h1>404 Not Found</h1>
-			</Container>
-		</center>
+		<Centered>
+			<img src={SVG404} alt="404 Not Found" />
+		</Centered>
 	);
 };
 
@@ -63,8 +98,9 @@ function App() {
 
 			<Switch>
 				<Route path="/" exact component={Home} />
-				<Route path="/url/:id" exact component={Redirect}></Route>
-				<Route path="*" component={NotFound}></Route>
+				<Route path="/url/:id" exact component={GetURL} />
+				<Route path="/404" exact component={Error404} />
+				<Route path="*" component={() => <Redirect to="/404" />} />
 			</Switch>
 		</Router>
 	);
