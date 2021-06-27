@@ -282,20 +282,22 @@ function Tools() {
           <>
             
             <ColumnLeft reverse="false">
-            <Button color="secondary" style={{top:"0", right:"0"}} onClick={() => setWebScrapper(false)}>
-              X
-            </Button>
               <h1>Title of the Page</h1>
               <p>Description</p>
               <p>url</p>
+              <Bottom>
+              <div className={classes.root}>
               <Button color="primary" variant="contained">
                 Go to URL
               </Button>
+              <Button color="primary" variant="contained" onClick={() => setWebScrapper(false)}>
+                RESET
+              </Button>
+              </div>
+              </Bottom>
             </ColumnLeft>
             <ColumnRight reverse="false">
-
-              Image got from the WebPage
-              <img src={WsSvg} alt="" />
+              <p>Image got from the WebPage</p>
             </ColumnRight>
           </>
         )}
