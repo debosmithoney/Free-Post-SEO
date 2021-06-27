@@ -5,6 +5,7 @@ import USSvgGo from "../Svg/Go.svg";
 import USSvg from "../Svg/undraw_link_shortener_mvf6.svg";
 import WsSvg from "../Svg/undraw_heatmap_uyye.svg";
 import YTSvg from "../Svg/undraw_Download_re_li50.svg";
+import NDSvg from "../Svg/undraw_No_data_re_kwbl.svg";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -78,13 +79,27 @@ const Bottom = styled.div`
 	padding-top: 15px;
 	justify-content: space-between;
 `;
+const ScrapImg = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
+  img{
+    border-radius:25px;
+  }
+  
+`;
 function Tools() {
 	const classes = useStyles();
 
 	const [shortenerButtons, setShortenerButtons] = useState(false);
 	const [scrapperButtons, setscrapperButtons] = useState(false);
 	const [isCopied, setCopy] = useState("Copy Link");
+  const [dataTitle, setDataTitle] = useState(null);
+  const [dataDescrip, setDataDescrip] = useState(null);
+  const [dataImg, setDataImg] = useState(null);
+  const [dataUrl, setDataURL] = useState(null);
+
 
 	const shortener = async (e) => {
 		e.preventDefault();
@@ -148,7 +163,11 @@ function Tools() {
 			);
 
 			const data = await response.json();
-
+      setDataTitle(data.title);
+      setDataDescrip(data.description);
+      setDataImg(data.image);
+      setDataURL(data.url);
+        console.log(dataImg);
 			setscrapperButtons(true);
 			console.log(data);
 		} catch (error) {
@@ -219,6 +238,10 @@ function Tools() {
 		const url = document.querySelector("input[name=url]").value;
 		window.open(`${url.startsWith("http") ? "" : "http://"}${url}`);
 	};
+
+  function truncate(str,n){
+    return str?.length > n ? str.substr(0,n-1) + "...": str;
+}
 
 	return (
 		<Section>
@@ -329,13 +352,12 @@ function Tools() {
 				)}
 				{scrapperButtons && (
 					<>
-						<ColumnLeft reverse="false">
-							<h1>Title of the Page</h1>
-							<p>Description</p>
-							<p>url</p>
+						<ColumnLeft reverse="false" >
+							<h1 style={{fontSize:"24px"}}>{dataTitle}</h1>
+							<p>{truncate(dataDescrip,50)}</p>
 							<Bottom>
 								<div className={classes.root}>
-									<Button color="primary" variant="contained">
+									<Button color="primary" variant="contained"  onClick={() => window.open(dataUrl)}>
 										Go to URL
 									</Button>
 									<Button
@@ -349,7 +371,21 @@ function Tools() {
 							</Bottom>
 						</ColumnLeft>
 						<ColumnRight reverse="false">
-							<p>Image got from the WebPage</p>
+            
+            {dataImg === null && (
+              <>
+							<img src={NDSvg} alt="" />
+              </>
+            )}
+              {dataImg !== null && (
+                <>
+                <ScrapImg>
+                <img src={dataImg} alt="" />
+                </ScrapImg>
+                </>
+
+              )}
+              
 						</ColumnRight>
 					</>
 				)}
@@ -380,7 +416,7 @@ function Tools() {
 					</form>
 				</ColumnLeft>
 				<ColumnRight>
-					<img src={YTSvg} alt="" />
+					<img src={YTSvg} alt="" style={{borderRadius:"25px"}}/>
 				</ColumnRight>
 			</Container>
 		</Section>

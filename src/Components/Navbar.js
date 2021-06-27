@@ -27,7 +27,8 @@ const Nav = styled.div`
 const NavLink = css`
   color: #f5f5f5;
   display: inline-block;
-  padding: 5px 20px;
+  padding: 5px;
+  margin: 5px 15px;
   position: relative;
   justify-content: center;
   align-items: center;
@@ -122,12 +123,13 @@ const Navbar = ({ toggle }) => {
           <NavMenuLinks to={item.link} key={index}>
             {item.title}
           </NavMenuLinks>
-        ))}{/*
+        ))}
+        {/*
 		<NavMenuLinks onClick={() => setOpenPopup(true)}>
 		Login / Register
 		</NavMenuLinks>
 		 */}
-		 `	`
+        ` `
       </NavMenu>
       <PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
         <Login />
