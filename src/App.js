@@ -20,11 +20,10 @@ const Container = styled.div`
 `;
 
 const Centered = styled.div`
-	margin-top: 20vh;
+	height: 100vh;
 	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	display: grid;
+	place-items: center;
 
 	& img {
 		width: 50%;
@@ -74,10 +73,10 @@ const GetURL = ({ match }) => {
 	}, [match]);
 
 	return (
-		<center style={{ display: "grid", placeitems: "center", height: "100vh" }}>
+		<center style={{ display: "grid", placeItems: "center", height: "100vh" }}>
 			<Container>
 				<h1>Redirecting</h1>
-				<Circle color="#191f18" size={80} />
+				<Circle color="#6c63ff" size={80} />
 			</Container>
 		</center>
 	);

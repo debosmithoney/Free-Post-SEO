@@ -129,7 +129,6 @@ const Navbar = ({ toggle }) => {
 		Login / Register
 		</NavMenuLinks>
 		 */}
-        ` `
       </NavMenu>
       <PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
         <Login />

@@ -76,9 +76,9 @@ const Dropdown = ({ isOpen, toggle }) => {
 								{item.title}
 							</DropdownLink>
 						))}
-						<DropdownLink onClick={() => setOpenPopup(true)}>
+						{/*<DropdownLink onClick={() => setOpenPopup(true)}>
 							Login/Register
-						</DropdownLink>
+						</DropdownLink>*/}
 					</DropdowMenu>
 				</DropdownWrapper>
 			</DropDownContainer>
