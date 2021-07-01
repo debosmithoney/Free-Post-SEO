@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import PopUp from "./PopUp";
 import Login from "./Login";
 import { FaBars } from "react-icons/fa";
+import logo from "../Svg/logo.png";
 
 const Nav = styled.div`
   margin: 0;
@@ -12,7 +13,7 @@ const Nav = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem;
+  padding: 1.2rem 1rem;
   z-index: 100;
   position: fixed;
   width: 100%;
@@ -48,17 +49,35 @@ const NavBars = styled(FaBars)`
   }
 `;
 
-const Logo = styled(Link)`
-  padding: 5px 20px;
-  padding-left: 80px;
+const Banner = styled(Link)`
+  padding: 15px 20px;
+  padding-left: 40px;
   color: #f5f5f5;
-  font-style: italic;
-  font-size: 1.4rem;
-  font-weight: 600;
+  cursor: pointer;
   text-decoration: none;
+  text-align: center;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 2.5rem;
+      margin-right: 5px;
+    }
+  }
+  p {
+    font-size: 0.7rem;
+    text-align: center;
+  }
 
   @media screen and (max-width: 992px) {
-    padding-left: 10px;
+    padding-left: 0px;
   }
 `;
 
@@ -116,7 +135,13 @@ const Navbar = ({ toggle }) => {
 
   return (
     <Nav style={{ background: `${navbar}` }}>
-      <Logo to="/">Free Post SEO</Logo>
+      <Banner to="/">
+        <h1>
+          <img src={logo} alt="logo" />
+          FreePostSeo
+        </h1>
+        <p>Empowering College Students</p>
+      </Banner>
       <NavBars onClick={toggle} />
       <NavMenu>
         {menuData.map((item, index) => (

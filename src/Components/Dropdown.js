@@ -34,7 +34,7 @@ const CloseIcon = styled(FaTimes)`
 	opacity: 0.8;
 `;
 const DropdownWrapper = styled.div``;
-const DropdowMenu = styled.div`
+const DropdownMenu = styled.div`
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: repeat(3, 80px);
@@ -66,7 +66,7 @@ const Dropdown = ({ isOpen, toggle }) => {
 					<CloseIcon />
 				</Icon>
 				<DropdownWrapper>
-					<DropdowMenu>
+					<DropdownMenu>
 						{menuData.map((item, index) => (
 							<DropdownLink to={item.link} key={index}>
 								{item.title}
@@ -75,7 +75,7 @@ const Dropdown = ({ isOpen, toggle }) => {
 						{/*<DropdownLink onClick={() => setOpenPopup(true)}>
 							Login/Register
 						</DropdownLink>*/}
-					</DropdowMenu>
+					</DropdownMenu>
 				</DropdownWrapper>
 			</DropDownContainer>
 			<PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
