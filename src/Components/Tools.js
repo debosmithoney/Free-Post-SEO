@@ -7,6 +7,7 @@ import WsSvg from "../Svg/undraw_heatmap_uyye.svg";
 import YTSvg from "../Svg/undraw_Download_re_li50.svg";
 import NDSvg from "../Svg/undraw_No_data_re_kwbl.svg";
 import { makeStyles } from "@material-ui/core/styles";
+import { Circle } from "better-react-spinkit";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,7 +78,6 @@ const ColumnRight = styled.div`
 
 const Bottom = styled.div`
   display: flex;
-  padding-top: 15px;
   justify-content: space-between;
 `;
 const ScrapImg = styled.div`
@@ -90,6 +90,7 @@ const ScrapImg = styled.div`
     border-radius: 25px;
   }
 `;
+
 function Tools() {
   const classes = useStyles();
 
@@ -97,9 +98,13 @@ function Tools() {
   const [scrapperButtons, setScrapperButtons] = useState(false);
   const [isCopied, setCopy] = useState("Copy Link");
   const [dataScrap, setDataScrap] = useState(null);
+  const [shortLoad, setShortLoad] = useState(false);
+  const [scrapLoad, setScrapLoad] = useState(false);
+  const [downLoad, setDownLoad] = useState(false);
 
   const shortener = async (e) => {
     e.preventDefault();
+    setShortLoad(true);
 
     const input = e.target.querySelector("input[name=url]");
 
@@ -110,8 +115,6 @@ function Tools() {
       .join("&");
 
     try {
-      console.log("fetching");
-
       const response = await fetch(
         "https://fpseo.herokuapp.com/tools/shorturl",
         {
@@ -133,11 +136,14 @@ function Tools() {
       setShortenerButtons(true);
     } catch (error) {
       console.error(error);
+    } finally {
+      setShortLoad(false);
     }
   };
 
   const scrapurl = async (e) => {
     e.preventDefault();
+    setScrapLoad(true);
 
     const body = [...e.target.querySelectorAll("input")]
       .map(
@@ -146,8 +152,6 @@ function Tools() {
       .join("&");
 
     try {
-      console.log("fetching");
-
       const response = await fetch(
         "https://fpseo.herokuapp.com/tools/scrapper",
         {
@@ -162,14 +166,16 @@ function Tools() {
       const data = await response.json();
       setDataScrap(data);
       setScrapperButtons(true);
-      console.log(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setScrapLoad(false);
     }
   };
 
   const download = async (e) => {
     e.preventDefault();
+    setDownLoad(true);
 
     const input = e.target.querySelector("input[name=url]");
     const button = e.target.querySelector("button[type=submit]");
@@ -181,8 +187,6 @@ function Tools() {
     try {
       input.setAttribute("disabled", "true");
       button.setAttribute("disabled", "true");
-
-      button.innerText = "Downloading";
 
       const response = await fetch(
         "https://fpseo.herokuapp.com/tools/youtubemp3",
@@ -208,15 +212,12 @@ function Tools() {
 
       audio.click();
       audio.remove();
-
-      button.innerText = "Downloaded";
     } catch (error) {
       console.log(error);
-      button.innerText = "Download Failed";
     } finally {
       input.removeAttribute("disabled");
       button.removeAttribute("disabled");
-      setTimeout(() => (button.innerText = "Download it 🎵"), 1500);
+      setDownLoad(false);
     }
   };
 
@@ -257,7 +258,13 @@ function Tools() {
                     color="primary"
                     style={{ paddingInline: "10px" }}
                   >
-                    Short it
+                    {shortLoad && (
+                      <Circle
+                        color="#ffffff"
+                        style={{ paddingRight: "10px" }}
+                      />
+                    )}
+                    Shorten it 🚀
                   </Button>
                 </>
               )}
@@ -333,7 +340,13 @@ function Tools() {
                     color="primary"
                     style={{ paddingInline: "10px" }}
                   >
-                    MArk it ✔
+                    {scrapLoad && (
+                      <Circle
+                        color="#ffffff"
+                        style={{ paddingRight: "10px" }}
+                      />
+                    )}
+                    Mark it ✔
                   </Button>
                 </FormControl>
               </form>
@@ -414,6 +427,9 @@ function Tools() {
                 color="primary"
                 style={{ paddingInline: "10px" }}
               >
+                {downLoad && (
+                  <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
+                )}
                 Download it 🎵
               </Button>
             </FormControl>
