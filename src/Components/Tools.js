@@ -235,7 +235,7 @@ function Tools() {
   };
 
   return (
-    <Section>
+    <Section id="tools" smooth={true} duration={1000}>
       <Container>
         <ColumnLeft>
           <h1>URL Shortener</h1>

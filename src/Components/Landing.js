@@ -63,7 +63,7 @@ const Bottom = styled.div``;
 
 function Landing() {
   return (
-    <Section>
+    <Section id="home">
       <Container>
         <Content>
           <h1>Free SEO Tools</h1>

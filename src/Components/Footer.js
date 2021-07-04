@@ -93,7 +93,7 @@ const Twitter = styled(RiTwitterFill)`
 
 const Footer = () => {
   return (
-    <Container>
+    <Container id="footer" smooth={true} duration={1000}>
       <Wrapper>
         <Row>
           <Column style={{ gridColumn: "1/3" }}>

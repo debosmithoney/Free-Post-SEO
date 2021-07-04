@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import PopUp from "./PopUp";
 import Login from "./Login";
-import { Link } from "react-router-dom";
+import { Link } from "react-scroll";
 import styled from "styled-components";
 import { menuData } from "../Data/NavMenu";
 
@@ -59,6 +59,7 @@ const DropdownLink = styled(Link)`
 
 const Dropdown = ({ isOpen, toggle }) => {
 	const [openPopup, setOpenPopup] = useState(false);
+
 	return (
 		<>
 			<DropDownContainer isOpen={isOpen} onClick={toggle}>
@@ -68,7 +69,7 @@ const Dropdown = ({ isOpen, toggle }) => {
 				<DropdownWrapper>
 					<DropdownMenu>
 						{menuData.map((item, index) => (
-							<DropdownLink to={item.link} key={index}>
+							<DropdownLink to={item.link} key={index} onClick={toggle} smooth={true} duration={1000}>
 								{item.title}
 							</DropdownLink>
 						))}
