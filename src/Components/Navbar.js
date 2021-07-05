@@ -5,6 +5,8 @@ import PopUp from "./PopUp";
 import Login from "./Login";
 import { FaBars } from "react-icons/fa";
 import logo from "../Svg/logo.png";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Drop from "./Drop";
 
 const Nav = styled.div`
   margin: 0;
@@ -122,6 +124,7 @@ const NavMenuLinks = styled(LinkS)`
 
 const Navbar = ({ toggle }) => {
   const [navbar, setNavbar] = useState("transparent");
+  const [openMenu, setOpenMenu] = useState(false);
 
   const ChangeBackground = () => {
     if (window.scrollY >= 128) {
@@ -136,36 +139,44 @@ const Navbar = ({ toggle }) => {
   const [openPopup, setOpenPopup] = useState(false);
 
   return (
-    <Nav style={{ background: `${navbar}` }}>
-      <Banner to="home" smooth={true} duration={1000}>
-        <img src={logo} alt="logo" />
-        <h1>
-          FreePostSeo
-          <p>Empowering College Students</p>
-        </h1>
-      </Banner>
-      <NavBars onClick={toggle} />
-      <NavMenu>
-        <NavMenuLinks to="home" smooth={true} duration={1000}>
-          Home
-        </NavMenuLinks>
-        <NavMenuLinks to="tools" smooth={true} duration={1000}>
-          Tools
-        </NavMenuLinks>
-        <NavMenuLinks to="footer" smooth={true} duration={1000}>
-          Contact Us
-        </NavMenuLinks>
+    <ClickAwayListener onClickAway={() => setOpenMenu(false)}>
+      <Nav style={{ background: `${navbar}` }}>
+        <Banner to="home" smooth={true} duration={1000}>
+          <img src={logo} alt="logo" />
+          <h1>
+            FreePostSeo
+            <p>Empowering College Students</p>
+          </h1>
+        </Banner>
+        <NavBars onClick={toggle} />
+        <NavMenu>
+          <NavMenuLinks to="home" smooth={true} duration={1000}>
+            Home
+          </NavMenuLinks>
+          <NavMenuLinks
+            smooth={true}
+            duration={1000}
+            onClick={() => setOpenMenu((prev) => !prev)}
+          >
+            Tools
+          </NavMenuLinks>
 
-        {/*
+          <NavMenuLinks to="footer" smooth={true} duration={1000}>
+            Contact Us
+          </NavMenuLinks>
+          {openMenu && <Drop background={navbar} toggler={setOpenMenu} />}
+
+          {/*
 		<NavMenuLinks onClick={() => setOpenPopup(true)}>
 		Login / Register
 		</NavMenuLinks>
 		 */}
-      </NavMenu>
-      <PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
-        <Login />
-      </PopUp>
-    </Nav>
+        </NavMenu>
+        <PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
+          <Login />
+        </PopUp>
+      </Nav>
+    </ClickAwayListener>
   );
 };
 

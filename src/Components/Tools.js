@@ -236,7 +236,7 @@ function Tools() {
 
   return (
     <Section id="tools" smooth={true} duration={1000}>
-      <Container>
+      <Container id="short">
         <ColumnLeft>
           <h1>URL Shortener</h1>
           <p>Use it to Reduce it 😉</p>
@@ -318,7 +318,7 @@ function Tools() {
           {shortenerButtons && <img src={USSvgGo} alt="" />}
         </ColumnRight>
       </Container>
-      <Container style={{ background: "transparent" }}>
+      <Container style={{ background: "transparent" }} id="bookmarker">
         {!scrapperButtons && (
           <>
             <ColumnLeft reverse="false">
@@ -407,7 +407,7 @@ function Tools() {
           </>
         )}
       </Container>
-      <Container>
+      <Container id="yt">
         <ColumnLeft>
           <h1>YouTube Song Downloader</h1>
           <p>Get the Trending Songs 🕺💃</p>
