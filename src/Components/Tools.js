@@ -163,7 +163,10 @@ function Tools() {
         }
       );
 
-      const data = await response.json();
+      const { error, data } = await response.json();
+
+      if (error) throw error;
+
       setDataScrap(data);
       setScrapperButtons(true);
     } catch (error) {
@@ -207,13 +210,13 @@ function Tools() {
       const audio = document.createElement("a");
 
       audio.style.display = "none";
-      audio.download = headers["filename"];
+      audio.download = decodeURIComponent(headers["filename"]);
       audio.href = URL.createObjectURL(blob);
 
       audio.click();
       audio.remove();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       input.removeAttribute("disabled");
       button.removeAttribute("disabled");
@@ -230,7 +233,7 @@ function Tools() {
   };
 
   const redirect = () => {
-    const url = document.querySelector("input[name=url]").value;
+    const url = document.querySelector("input[id=shorturl]").value;
     window.open(`${url.startsWith("http") ? "" : "http://"}${url}`);
   };
 
