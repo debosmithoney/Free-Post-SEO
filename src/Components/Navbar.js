@@ -8,7 +8,6 @@ import { FaBars } from "react-icons/fa";
 import logo from "../Svg/logo.png";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Drop from "./Drop";
-import Error from "./Error";
 
 const Nav = styled.div`
   margin: 0;
@@ -139,12 +138,11 @@ const Navbar = ({ toggle }) => {
   window.addEventListener("scroll", ChangeBackground);
 
   const [openLogPopup, setOpenLogPopup] = useState(false);
-  const [openError, setOpenError] = useState(false);
 
   const handleClose = () => {
-    setOpenError(false);
     setOpenMenu(false);
   };
+
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <Nav style={{ background: `${navbar}` }}>
@@ -171,7 +169,6 @@ const Navbar = ({ toggle }) => {
           <NavMenuLinks to="footer" smooth={true} duration={1000}>
             Contact Us
           </NavMenuLinks>
-          <NavMenuLinks onClick={() => setOpenError(true)}>Error</NavMenuLinks>
           {openMenu && <Drop background={navbar} toggler={setOpenMenu} />}
 
           <NavMenuLinks onClick={() => setOpenLogPopup(true)}>
@@ -180,9 +177,6 @@ const Navbar = ({ toggle }) => {
         </NavMenu>
         <PopUp openPopup={openLogPopup} setOpenPopup={setOpenLogPopup}>
           <Login />
-        </PopUp>
-        <PopUp openPopup={openError} setOpenPopup={setOpenError}>
-          <Error />
         </PopUp>
       </Nav>
     </ClickAwayListener>
