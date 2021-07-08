@@ -3,6 +3,9 @@ import styled from "styled-components";
 import SuSvg from "../Svg/undraw_authentication_fsn5.svg";
 import SiSvg from "../Svg/undraw_unlock_24mb.svg";
 import fpSvg from "../Svg/undraw_forgot_password_gi2d.svg";
+import voSvg from "../Svg/search.svg";
+import rSvg from "../Svg/password.svg";
+import suSvg from "../Svg/success.svg";
 import TextField from "@material-ui/core/TextField";
 import { Button, FormControl } from "@material-ui/core";
 
@@ -96,10 +99,10 @@ const loginUser = async (e) => {
     .filter((e) => e.name.match(/user\[(password)\]/gi))
     .map((e) => e.value);
 
-	if(password.match(passwordRegExp) === null)
-	return alert(
-		"Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
-	);
+  if (password.match(passwordRegExp) === null)
+    return alert(
+      "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
+    );
 
   const body = [...e.target.querySelectorAll("input")]
     .filter((e) => e.name.match(/user\[((email)|(password))\]/gi))
@@ -136,6 +139,9 @@ function Login() {
         {showlog === "signin" && <img src={SiSvg} alt="" height="300px" />}
         {showlog === "signup" && <img src={SuSvg} alt="" height="300px" />}
         {showlog === "forgot" && <img src={fpSvg} alt="" height="300px" />}
+        {showlog === "verifyotp" && <img src={voSvg} alt="" height="300px" />}
+        {showlog === "reset" && <img src={rSvg} alt="" height="300px" />}
+        {showlog === "success" && <img src={suSvg} alt="" height="300px" />}
       </LeftSide>
       <RightSide>
         {showlog === "signin" && (
@@ -245,21 +251,22 @@ function Login() {
         {showlog === "forgot" && (
           <>
             <SignTab>
-              <h2>Enter your registered email</h2>
+              <h2>Forgot Password</h2>
             </SignTab>
             <TextField
               id="standard-required"
               label="Email"
               type="email"
-              color="whitesmoke"
+              helpertext="Enter your registered password"
               style={{ paddingBottom: "15px" }}
             />
             <Button
               variant="contained"
               color="primary"
               style={{ paddingInline: "10px" }}
+              onClick={() => setShowlog("verifyotp")}
             >
-              Logout
+              Send OTP
             </Button>
             <Bottom>
               <Button
@@ -267,35 +274,69 @@ function Login() {
                 style={{ paddingInline: "10px" }}
                 onClick={() => setShowlog("signin")}
               >
-                remember your password
+                login
               </Button>
             </Bottom>
           </>
         )}
-				{showlog === "success" && (
-					<>
+        {showlog === "verifyotp" && (
+          <>
             <SignTab>
-              <h2>Welcome "User Name"</h2>
+              <h2>Verify OTP</h2>
             </SignTab>
-            
+            <TextField
+              id="standard-required"
+              label="Email"
+              type="email"
+              helpertext="Enter your OTP"
+              style={{ paddingBottom: "15px" }}
+            />
             <Button
               variant="contained"
               color="primary"
               style={{ paddingInline: "10px" }}
+              onClick={() => setShowlog("reset")}
+            >
+              Reset
+            </Button>
+          </>
+        )}
+        {showlog === "reset" && (
+          <>
+            <SignTab>
+              <h2>Verify OTP</h2>
+            </SignTab>
+            <TextField
+              id="standard-required"
+              label="Enter new password"
+              type="password"
+              style={{ paddingBottom: "15px" }}
+            />
+            <TextField
+              id="standard-required"
+              label="Re-enter password"
+              type="password"
+              helpertext="Enter your OTP"
+              style={{ paddingBottom: "15px" }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ paddingInline: "10px" }}
+              onClick={() => setShowlog("success")}
             >
               Confirm
             </Button>
-            <Bottom>
-              <Button
-                color="primary"
-                style={{ paddingInline: "10px" }}
-                onClick={() => setShowlog("signin")}
-              >
-                remember your password
-              </Button>
-            </Bottom>
           </>
-				)}
+        )}
+        {showlog === "success" && (
+          <>
+            <SignTab>
+              <h2>Welcome "User Name"</h2>
+            </SignTab>
+            <p style={{alignSelf: "center",justifyContent:"center"}}>We would like to Provide you with best features for Free🎉</p>
+          </>
+        )}
       </RightSide>
     </Front>
   );

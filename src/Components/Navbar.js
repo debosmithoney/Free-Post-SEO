@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import { Link as LinkR } from "react-router-dom";
 import { Link as LinkS } from "react-scroll";
 import PopUp from "./PopUp";
 import Login from "./Login";
@@ -7,6 +8,7 @@ import { FaBars } from "react-icons/fa";
 import logo from "../Svg/logo.png";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Drop from "./Drop";
+import Error from "./Error";
 
 const Nav = styled.div`
   margin: 0;
@@ -50,7 +52,7 @@ const NavBars = styled(FaBars)`
   }
 `;
 
-const Banner = styled(LinkS)`
+const Banner = styled(LinkR)`
   padding: 15px 20px 15px 40px;
   color: #f5f5f5;
   cursor: pointer;
@@ -136,12 +138,17 @@ const Navbar = ({ toggle }) => {
 
   window.addEventListener("scroll", ChangeBackground);
 
-  const [openPopup, setOpenPopup] = useState(false);
+  const [openLogPopup, setOpenLogPopup] = useState(false);
+  const [openError, setOpenError] = useState(false);
 
+  const handleClose = () => {
+    setOpenError(false);
+    setOpenMenu(false);
+  };
   return (
-    <ClickAwayListener onClickAway={() => setOpenMenu(false)}>
+    <ClickAwayListener onClickAway={handleClose}>
       <Nav style={{ background: `${navbar}` }}>
-        <Banner to="home" smooth={true} duration={1000}>
+        <Banner to="/" smooth={true} duration={1000}>
           <img src={logo} alt="logo" />
           <h1>
             FreePostSeo
@@ -164,16 +171,18 @@ const Navbar = ({ toggle }) => {
           <NavMenuLinks to="footer" smooth={true} duration={1000}>
             Contact Us
           </NavMenuLinks>
+          <NavMenuLinks onClick={() => setOpenError(true)}>Error</NavMenuLinks>
           {openMenu && <Drop background={navbar} toggler={setOpenMenu} />}
 
-          {/*
-		<NavMenuLinks onClick={() => setOpenPopup(true)}>
-		Login / Register
-		</NavMenuLinks>
-		 */}
+          <NavMenuLinks onClick={() => setOpenLogPopup(true)}>
+            Login / Register
+          </NavMenuLinks>
         </NavMenu>
-        <PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
+        <PopUp openPopup={openLogPopup} setOpenPopup={setOpenLogPopup}>
           <Login />
+        </PopUp>
+        <PopUp openPopup={openError} setOpenPopup={setOpenError}>
+          <Error />
         </PopUp>
       </Nav>
     </ClickAwayListener>
