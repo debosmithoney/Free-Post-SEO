@@ -8,7 +8,7 @@ const Menu = styled.div`
   width: 200px;
   position: absolute;
   top: 80px;
-  right: 100px;
+  right: 180px;
   list-style: none;
   text-align: center;
 `;
