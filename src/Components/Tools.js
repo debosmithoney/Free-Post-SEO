@@ -8,6 +8,7 @@ import YTSvg from "../Svg/undraw_Download_re_li50.svg";
 import NDSvg from "../Svg/undraw_No_data_re_kwbl.svg";
 import { makeStyles } from "@material-ui/core/styles";
 import { Circle } from "better-react-spinkit";
+import { apiurl, fetchOptions } from "../utils/fetchSetting";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +22,6 @@ const Section = styled.div`
   width: 100%;
   height: 100%;
   padding: 4rem 1rem;
-  scroll-snap-align: start;
 `;
 const Container = styled.div`
   scroll-snap-type: y mandatory;
@@ -116,14 +116,8 @@ function Tools() {
 
     try {
       const response = await fetch(
-        "https://fpseo.herokuapp.com/tools/shorturl",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: body,
-        }
+        `${apiurl}/tools/shorturl`,
+        fetchOptions("POST", body)
       );
 
       const { error, urlid } = await response.json();
@@ -153,21 +147,15 @@ function Tools() {
 
     try {
       const response = await fetch(
-        "https://fpseo.herokuapp.com/tools/scrapper",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: body,
-        }
+        `${apiurl}/tools/scrapper`,
+        fetchOptions("POST", body)
       );
 
-      const { error, data } = await response.json();
+      const { error, scrapData } = await response.json();
 
       if (error) throw error;
 
-      setDataScrap(data);
+      setDataScrap(scrapData);
       setScrapperButtons(true);
     } catch (error) {
       console.error(error);
@@ -192,14 +180,8 @@ function Tools() {
       button.setAttribute("disabled", "true");
 
       const response = await fetch(
-        "https://fpseo.herokuapp.com/tools/youtubemp3",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: body,
-        }
+        `${apiurl}/tools/youtubemp3`,
+        fetchOptions("POST", body)
       );
 
       const headers = Object.fromEntries(response.headers.entries());

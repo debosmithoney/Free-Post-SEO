@@ -8,6 +8,7 @@ import rSvg from "../Svg/password.svg";
 import suSvg from "../Svg/success.svg";
 import TextField from "@material-ui/core/TextField";
 import { Button, FormControl } from "@material-ui/core";
+import { apiurl, fetchOptions } from "../utils/fetchSetting";
 
 // color: #6C63FF
 
@@ -43,94 +44,170 @@ const SignTab = styled.div`
 `;
 
 const Bottom = styled.div`
-  padding: 2rem 0;
+  padding: 1rem 0;
   opacity: 0.8;
   display: flex;
   font-size: 0.8rem;
   cursor: pointer;
 `;
 
-const signupnUser = async (e) => {
-  // const passwordRegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  const passwordRegExp =
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-
-  e.preventDefault();
-  const [password, passwordRepeat] = [...e.target.querySelectorAll("input")]
-    .filter((e) => e.name.match(/user\[((password)|(password-repeat))\]/gi))
-    .map((e) => e.value);
-
-  if (password.match(passwordRegExp) === null)
-    return alert(
-      "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
-    );
-
-  if (password !== passwordRepeat) return alert("Passwords Don't Match");
-
-  const body = [...e.target.querySelectorAll("input")]
-    .filter((e) => e.name.match(/user\[((name)|(email)|(password))\]/gi))
-    .map((e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`)
-    .join("&");
-
-  try {
-    const res = await fetch("https://fpseo.herokuapp.com/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: body,
-    });
-
-    const data = await res.json();
-
-    console.log(data);
-  } catch (error) {
-    alert(error.message);
-  }
-};
-
-const loginUser = async (e) => {
-  e.preventDefault();
-
-  const passwordRegExp =
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-
-  const [password] = [...e.target.querySelectorAll("input")]
-    .filter((e) => e.name.match(/user\[(password)\]/gi))
-    .map((e) => e.value);
-
-  if (password.match(passwordRegExp) === null)
-    return alert(
-      "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
-    );
-
-  const body = [...e.target.querySelectorAll("input")]
-    .filter((e) => e.name.match(/user\[((email)|(password))\]/gi))
-    .map((e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`)
-    .join("&");
-
-  try {
-    const res = await fetch("https://fpseo.herokuapp.com/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: body,
-    });
-
-    const data = await res.json();
-
-    console.log(data);
-  } catch (error) {
-    alert(error);
-  }
-};
-
 function Login() {
   const [showlog, setShowlog] = useState("signin");
+  const [resetid, setResetid] = useState("");
 
   const changeState = () => {
     setShowlog("signup");
+  };
+
+  const isValidPassword = (password) => {
+    const passwordRegExp =
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
+    if (password.match(passwordRegExp) !== null) return true;
+
+    alert(
+      "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
+    );
+
+    return false;
+  };
+
+  const signupnUser = async (e) => {
+    e.preventDefault();
+
+    const [password, passwordRepeat] = [...e.target.querySelectorAll("input")]
+      .filter((e) => e.name.match(/user\[((password)|(password-repeat))\]/gi))
+      .map((e) => e.value);
+
+    if (password !== passwordRepeat) return alert("Passwords Don't Match");
+
+    if (!isValidPassword(password)) return;
+
+    const body = [...e.target.querySelectorAll("input")]
+      .filter((e) => e.name.match(/user\[((name)|(email)|(password))\]/gi))
+      .map(
+        (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
+      )
+      .join("&");
+
+    try {
+      const res = await fetch(
+        `${apiurl}/users/register`,
+        fetchOptions("POST", body)
+      );
+
+      if (res.status !== 200) throw (await res.json()).error;
+
+      console.log("Registered");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const loginUser = async (e) => {
+    e.preventDefault();
+
+    const [password] = [...e.target.querySelectorAll("input")]
+      .filter((e) => e.name.match(/user\[(password)\]/gi))
+      .map((e) => e.value);
+
+    if (!isValidPassword(password)) return;
+
+    const body = [...e.target.querySelectorAll("input")]
+      .filter((e) => e.name.match(/user\[((email)|(password))\]/gi))
+      .map(
+        (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
+      )
+      .join("&");
+
+    try {
+      const res = await fetch(
+        `${apiurl}/users/login`,
+        fetchOptions("POST", body)
+      );
+
+      if (res.status !== 200) throw (await res.json()).error;
+
+      console.log("Logged In");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const forgotpassword = async (e) => {
+    e.preventDefault();
+
+    const body = [...new FormData(e.target).entries()]
+      .map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`)
+      .join("&");
+
+    try {
+      const res = await fetch(
+        `${apiurl}/users/forgot`,
+        fetchOptions("POST", body)
+      );
+
+      if (res.status !== 200) throw (await res.json()).error;
+
+      setShowlog("verify");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const verifyOtp = async (e) => {
+    e.preventDefault();
+
+    const body = [...new FormData(e.target).entries()]
+      .map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`)
+      .join("&");
+
+    try {
+      const res = await fetch(
+        `${apiurl}/users/verifyotp`,
+        fetchOptions("POST", body)
+      );
+
+      if (res.status !== 200) throw (await res.json()).error;
+
+      setResetid((await res.json()).resetid);
+      setShowlog("reset");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const reset = async (e) => {
+    e.preventDefault();
+
+    const [password, passwordRepeat] = [...e.target.querySelectorAll("input")]
+      .filter((e) => e.name.match(/(password)|(password-repeat)/gi))
+      .map((e) => e.value);
+
+    if (password !== passwordRepeat) return alert("Passwords Don't Match");
+
+    if (!isValidPassword(password)) return;
+
+    const body = [...e.target.querySelectorAll("input")]
+      .filter((e) => e.name.match(/^password$/gi))
+      .map(
+        (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
+      )
+      .join("&");
+
+    try {
+      const res = await fetch(
+        `${apiurl}/users/reset/${resetid}`,
+        fetchOptions("POST", body)
+      );
+
+      if (res.status !== 200) throw (await res.json()).error;
+
+      console.log("Password Reset Successful");
+      setShowlog("signin");
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -139,7 +216,7 @@ function Login() {
         {showlog === "signin" && <img src={SiSvg} alt="" height="300px" />}
         {showlog === "signup" && <img src={SuSvg} alt="" height="300px" />}
         {showlog === "forgot" && <img src={fpSvg} alt="" height="300px" />}
-        {showlog === "verifyotp" && <img src={voSvg} alt="" height="300px" />}
+        {showlog === "verify" && <img src={voSvg} alt="" height="300px" />}
         {showlog === "reset" && <img src={rSvg} alt="" height="300px" />}
         {showlog === "success" && <img src={suSvg} alt="" height="300px" />}
       </LeftSide>
@@ -152,14 +229,12 @@ function Login() {
             <form onSubmit={loginUser}>
               <FormControl>
                 <TextField
-                  id="standard-required"
                   label="Email"
                   type="email"
                   name="user[email]"
                   style={{ paddingBottom: "5px" }}
                 />
                 <TextField
-                  id="standard-password-input"
                   label="Password"
                   type="password"
                   name="user[password]"
@@ -198,29 +273,25 @@ function Login() {
             <form onSubmit={signupnUser}>
               <FormControl>
                 <TextField
-                  id="standard-required"
                   type="text"
                   label="Name"
                   name="user[name]"
                   style={{ paddingBottom: "5px" }}
                 />
                 <TextField
-                  id="standard-required"
                   label="Email"
                   type="email"
                   name="user[email]"
                   style={{ paddingBottom: "5px" }}
                 />
                 <TextField
-                  id="standard-password-input"
                   label="Password"
                   type="password"
                   name="user[password]"
                   autoComplete="current-password"
-                  style={{ paddingBottom: "20px" }}
+                  style={{ paddingBottom: "5px" }}
                 />
                 <TextField
-                  id="standard-password-input"
                   label="Re-enter Password"
                   type="password"
                   name="user[password-repeat]"
@@ -253,80 +324,109 @@ function Login() {
             <SignTab>
               <h2>Forgot Password</h2>
             </SignTab>
-            <TextField
-              id="standard-required"
-              label="Email"
-              type="email"
-              helpertext="Enter your registered password"
-              style={{ paddingBottom: "15px" }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ paddingInline: "10px" }}
-              onClick={() => setShowlog("verifyotp")}
-            >
-              Send OTP
-            </Button>
+            <form onSubmit={forgotpassword}>
+              <FormControl>
+                <TextField
+                  name="email"
+                  label="Email"
+                  type="email"
+                  helperText="Enter your registered email"
+                  style={{ paddingBottom: "15px" }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingInline: "10px" }}
+                >
+                  Send OTP
+                </Button>
+              </FormControl>
+            </form>
             <Bottom>
               <Button
                 color="primary"
                 style={{ paddingInline: "10px" }}
                 onClick={() => setShowlog("signin")}
               >
-                login
+                Log In
               </Button>
             </Bottom>
           </>
         )}
-        {showlog === "verifyotp" && (
+        {showlog === "verify" && (
           <>
             <SignTab>
               <h2>Verify OTP</h2>
             </SignTab>
-            <TextField
-              id="standard-required"
-              label="Email"
-              type="email"
-              helpertext="Enter your OTP"
-              style={{ paddingBottom: "15px" }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ paddingInline: "10px" }}
-              onClick={() => setShowlog("reset")}
-            >
-              Reset
-            </Button>
+            <form onSubmit={verifyOtp}>
+              <FormControl>
+                <TextField
+                  label="OTP"
+                  type="text"
+                  name="otp"
+                  helperText="Enter OTP received"
+                  style={{ paddingBottom: "15px" }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingInline: "10px" }}
+                >
+                  Reset
+                </Button>
+              </FormControl>
+            </form>
+            <Bottom>
+              <Button
+                color="primary"
+                style={{ paddingInline: "10px" }}
+                onClick={() => setShowlog("signin")}
+              >
+                Cancel
+              </Button>
+            </Bottom>
           </>
         )}
         {showlog === "reset" && (
           <>
             <SignTab>
-              <h2>Verify OTP</h2>
+              <h2>Reset Password</h2>
             </SignTab>
-            <TextField
-              id="standard-required"
-              label="Enter new password"
-              type="password"
-              style={{ paddingBottom: "15px" }}
-            />
-            <TextField
-              id="standard-required"
-              label="Re-enter password"
-              type="password"
-              helpertext="Enter your OTP"
-              style={{ paddingBottom: "15px" }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ paddingInline: "10px" }}
-              onClick={() => setShowlog("success")}
-            >
-              Confirm
-            </Button>
+            <form onSubmit={reset}>
+              <FormControl>
+                <TextField
+                  label="Enter new password"
+                  type="password"
+                  name="password"
+                  style={{ paddingBottom: "5px" }}
+                />
+                <TextField
+                  label="Re-enter new password"
+                  type="password"
+                  name="password-repeat"
+                  style={{ paddingBottom: "15px" }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingInline: "10px" }}
+                >
+                  Confirm
+                </Button>
+              </FormControl>
+            </form>
+            <Bottom>
+              <Button
+                color="primary"
+                style={{ paddingInline: "10px" }}
+                onClick={() => setShowlog("signin")}
+              >
+                Cancel
+              </Button>
+            </Bottom>
           </>
         )}
         {showlog === "success" && (
@@ -334,7 +434,9 @@ function Login() {
             <SignTab>
               <h2>Welcome "User Name"</h2>
             </SignTab>
-            <p style={{alignSelf: "center",justifyContent:"center"}}>We would like to Provide you with best features for Free🎉</p>
+            <p style={{ alignSelf: "center", justifyContent: "center" }}>
+              We would like to Provide you with best features for Free🎉
+            </p>
           </>
         )}
       </RightSide>

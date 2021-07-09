@@ -137,8 +137,7 @@ const Navbar = ({ toggle }) => {
 
   window.addEventListener("scroll", ChangeBackground);
 
-  const [openLogPopup, setOpenLogPopup] = useState(false);
-
+  const [openPopup, setOpenPopup] = useState(false);
   const handleClose = () => {
     setOpenMenu(false);
   };
@@ -171,11 +170,11 @@ const Navbar = ({ toggle }) => {
           </NavMenuLinks>
           {openMenu && <Drop background={navbar} toggler={setOpenMenu} />}
 
-          <NavMenuLinks onClick={() => setOpenLogPopup(true)}>
+          <NavMenuLinks onClick={() => setOpenPopup(true)}>
             Login / Register
           </NavMenuLinks>
         </NavMenu>
-        <PopUp openPopup={openLogPopup} setOpenPopup={setOpenLogPopup}>
+        <PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
           <Login />
         </PopUp>
       </Nav>
