@@ -8,9 +8,11 @@ const Menu = styled.div`
   width: 200px;
   position: absolute;
   top: 80px;
-  right: 180px;
   list-style: none;
   text-align: center;
+  border-radius: 0 0 15px 15px;
+  transition: 200ms ease-in;
+  transform: translateX(47.5px);
 `;
 
 const MenuLink = styled(LinkS)`
@@ -22,6 +24,11 @@ const MenuLink = styled(LinkS)`
   color: #fff;
   padding: 6px;
   transition: 200ms ease-in-out;
+
+  &:last-child {
+    border-radius: 0 0 15px 15px;
+  }
+
   &:hover {
     background: #6c63ff;
   }
