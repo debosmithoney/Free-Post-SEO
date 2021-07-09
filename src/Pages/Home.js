@@ -7,17 +7,17 @@ import Dropdown from "../Components/Dropdown";
 import Navbar from "../Components/Navbar";
 
 const Home = () => {
-	const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-	const toggle = (e) => {
-		setIsOpen(!isOpen);
-	};
+  const toggle = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>
-      <GlobalStyle />	
-	  <Navbar toggle={toggle} id="navbar"/>
-	  <Dropdown isOpen={isOpen} toggle={toggle} id="drop"/>
+      <GlobalStyle />
+      <Navbar toggle={toggle} id="navbar" />
+      <Dropdown isOpen={isOpen} toggle={toggle} id="drop" />
       <Landing id="landing" />
       <Tools id="tools" />
       <Footer id="contact" />

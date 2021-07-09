@@ -1,27 +1,25 @@
 import React from "react";
-import { Dialog, DialogTitle, DialogContent, Button } from "@material-ui/core";
+import { Dialog, DialogContent, Button } from "@material-ui/core";
 
 function PopUp(props) {
-	const { onClose, selectedValue, children, openPopup, setOpenPopup } = props;
+  const { onClose, selectedValue, children, openPopup, setOpenPopup } = props;
 
-	const handleClose = () => {
-		onClose(selectedValue);
-	};
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
 
-	return (
-		<Dialog open={openPopup} maxWidth="md" onclose={handleClose}>
-			<DialogTitle>
-				<Button
-					color="secondary"
-					style={{ position: "absolute", right: "10px" }}
-					onClick={() => setOpenPopup(false)}
-				>
-					X
-				</Button>
-			</DialogTitle>
-			<DialogContent>{children}</DialogContent>
-		</Dialog>
-	);
+  return (
+    <Dialog open={openPopup} maxWidth="md" onclose={handleClose}>
+      <Button
+        color="secondary"
+        style={{ position: "absolute", right: "10px", top: "10px" }}
+        onClick={() => setOpenPopup(false)}
+      >
+        X
+      </Button>
+      <DialogContent style={{}}>{children}</DialogContent>
+    </Dialog>
+  );
 }
 
 export default PopUp;

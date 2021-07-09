@@ -15,7 +15,6 @@ import { apiurl, fetchOptions } from "../utils/fetchSetting";
 const Front = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 400px;
   padding: 2rem 2rem;
   max-height: 500px;
   @media screen and (max-width: 768px) {
@@ -39,7 +38,7 @@ const SignTab = styled.div`
   justify-content: space-between;
 
   h2 {
-    padding-inline: 10px;
+    text-align: center;
   }
 `;
 
