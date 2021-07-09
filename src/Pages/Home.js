@@ -5,6 +5,8 @@ import Tools from "../Components/Tools";
 import Landing from "../Components/Landing";
 import Dropdown from "../Components/Dropdown";
 import Navbar from "../Components/Navbar";
+import ReactNotification from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +18,7 @@ const Home = () => {
   return (
     <>
       <GlobalStyle />
+      <ReactNotification />
       <Navbar toggle={toggle} id="navbar" />
       <Dropdown isOpen={isOpen} toggle={toggle} id="drop" />
       <Landing id="landing" />

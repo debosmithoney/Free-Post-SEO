@@ -1,3 +1,5 @@
+/* eslint-disable no-throw-literal */
+
 import React, { useState } from "react";
 import styled from "styled-components";
 import SuSvg from "../Svg/undraw_authentication_fsn5.svg";
@@ -9,6 +11,8 @@ import suSvg from "../Svg/success.svg";
 import TextField from "@material-ui/core/TextField";
 import { Button, FormControl } from "@material-ui/core";
 import { apiurl, fetchOptions } from "../utils/fetchSetting";
+import Circle from "better-react-spinkit/dist/Circle";
+import Notify from "./Notify";
 
 // color: #6C63FF
 
@@ -53,6 +57,7 @@ const Bottom = styled.div`
 function Login() {
   const [showlog, setShowlog] = useState("signin");
   const [resetid, setResetid] = useState("");
+  const [showSpin, setShowSpin] = useState(false);
 
   const changeState = () => {
     setShowlog("signup");
@@ -64,32 +69,31 @@ function Login() {
 
     if (password.match(passwordRegExp) !== null) return true;
 
-    alert(
-      "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
-    );
-
     return false;
   };
 
   const signupnUser = async (e) => {
     e.preventDefault();
 
+    setShowSpin(true);
+
     const [password, passwordRepeat] = [...e.target.querySelectorAll("input")]
       .filter((e) => e.name.match(/user\[((password)|(password-repeat))\]/gi))
       .map((e) => e.value);
 
-    if (password !== passwordRepeat) return alert("Passwords Don't Match");
-
-    if (!isValidPassword(password)) return;
-
-    const body = [...e.target.querySelectorAll("input")]
-      .filter((e) => e.name.match(/user\[((name)|(email)|(password))\]/gi))
-      .map(
-        (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
-      )
-      .join("&");
-
     try {
+      if (password !== passwordRepeat) throw "Passwords Don't Match";
+
+      if (!isValidPassword(password))
+        throw "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
+
+      const body = [...e.target.querySelectorAll("input")]
+        .filter((e) => e.name.match(/user\[((name)|(email)|(password))\]/gi))
+        .map(
+          (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
+        )
+        .join("&");
+
       const res = await fetch(
         `${apiurl}/users/register`,
         fetchOptions("POST", body)
@@ -97,29 +101,34 @@ function Login() {
 
       if (res.status !== 200) throw (await res.json()).error;
 
-      console.log("Registered");
+      Notify("Login Success", "Welcome");
     } catch (error) {
-      alert(error);
+      Notify("Error", error, "danger");
+    } finally {
+      setShowSpin(false);
     }
   };
 
   const loginUser = async (e) => {
     e.preventDefault();
 
+    setShowSpin(true);
+
     const [password] = [...e.target.querySelectorAll("input")]
       .filter((e) => e.name.match(/user\[(password)\]/gi))
       .map((e) => e.value);
 
-    if (!isValidPassword(password)) return;
-
-    const body = [...e.target.querySelectorAll("input")]
-      .filter((e) => e.name.match(/user\[((email)|(password))\]/gi))
-      .map(
-        (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
-      )
-      .join("&");
-
     try {
+      if (!isValidPassword(password))
+        throw "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
+
+      const body = [...e.target.querySelectorAll("input")]
+        .filter((e) => e.name.match(/user\[((email)|(password))\]/gi))
+        .map(
+          (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
+        )
+        .join("&");
+
       const res = await fetch(
         `${apiurl}/users/login`,
         fetchOptions("POST", body)
@@ -127,14 +136,18 @@ function Login() {
 
       if (res.status !== 200) throw (await res.json()).error;
 
-      console.log("Logged In");
+      Notify("Login Success", "Welcome");
     } catch (error) {
-      alert(error);
+      Notify("Error", error, "danger");
+    } finally {
+      setShowSpin(false);
     }
   };
 
   const forgotpassword = async (e) => {
     e.preventDefault();
+
+    setShowSpin(true);
 
     const body = [...new FormData(e.target).entries()]
       .map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`)
@@ -149,13 +162,19 @@ function Login() {
       if (res.status !== 200) throw (await res.json()).error;
 
       setShowlog("verify");
+
+      Notify("OTP Sent", "Check Your Mail", "info");
     } catch (error) {
-      alert(error);
+      Notify("Error", error, "danger");
+    } finally {
+      setShowSpin(false);
     }
   };
 
   const verifyOtp = async (e) => {
     e.preventDefault();
+
+    setShowSpin(true);
 
     const body = [...new FormData(e.target).entries()]
       .map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`)
@@ -171,30 +190,37 @@ function Login() {
 
       setResetid((await res.json()).resetid);
       setShowlog("reset");
+
+      Notify("OTP Verified", "", "info");
     } catch (error) {
-      alert(error);
+      Notify("Error", error, "danger");
+    } finally {
+      setShowSpin(false);
     }
   };
 
   const reset = async (e) => {
     e.preventDefault();
 
+    setShowSpin(true);
+
     const [password, passwordRepeat] = [...e.target.querySelectorAll("input")]
       .filter((e) => e.name.match(/(password)|(password-repeat)/gi))
       .map((e) => e.value);
 
-    if (password !== passwordRepeat) return alert("Passwords Don't Match");
-
-    if (!isValidPassword(password)) return;
-
-    const body = [...e.target.querySelectorAll("input")]
-      .filter((e) => e.name.match(/^password$/gi))
-      .map(
-        (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
-      )
-      .join("&");
-
     try {
+      if (password !== passwordRepeat) throw "Passwords Don't Match";
+
+      if (!isValidPassword(password))
+        throw "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
+
+      const body = [...e.target.querySelectorAll("input")]
+        .filter((e) => e.name.match(/^password$/gi))
+        .map(
+          (e) => `${encodeURIComponent(e.name)}=${encodeURIComponent(e.value)}`
+        )
+        .join("&");
+
       const res = await fetch(
         `${apiurl}/users/reset/${resetid}`,
         fetchOptions("POST", body)
@@ -202,10 +228,13 @@ function Login() {
 
       if (res.status !== 200) throw (await res.json()).error;
 
-      console.log("Password Reset Successful");
       setShowlog("signin");
+
+      Notify("Reset Success", "Password Changed Sucessfully");
     } catch (error) {
-      alert(error);
+      Notify("Error", error, "danger");
+    } finally {
+      setShowSpin(false);
     }
   };
 
@@ -246,6 +275,9 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
+                  {showSpin && (
+                    <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
+                  )}
                   Login
                 </Button>
               </FormControl>
@@ -303,6 +335,9 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
+                  {showSpin && (
+                    <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
+                  )}
                   Sign Up
                 </Button>
               </FormControl>
@@ -338,6 +373,9 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
+                  {showSpin && (
+                    <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
+                  )}
                   Send OTP
                 </Button>
               </FormControl>
@@ -373,6 +411,9 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
+                  {showSpin && (
+                    <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
+                  )}
                   Reset
                 </Button>
               </FormControl>
@@ -413,6 +454,9 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
+                  {showSpin && (
+                    <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
+                  )}
                   Confirm
                 </Button>
               </FormControl>
