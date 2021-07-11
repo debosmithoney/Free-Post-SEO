@@ -1,5 +1,3 @@
-/* eslint-disable no-throw-literal */
-
 import React, { useState } from "react";
 import styled from "styled-components";
 import SuSvg from "../Svg/undraw_authentication_fsn5.svg";
@@ -7,7 +5,6 @@ import SiSvg from "../Svg/undraw_unlock_24mb.svg";
 import fpSvg from "../Svg/undraw_forgot_password_gi2d.svg";
 import voSvg from "../Svg/search.svg";
 import rSvg from "../Svg/password.svg";
-import suSvg from "../Svg/success.svg";
 import TextField from "@material-ui/core/TextField";
 import { Button, FormControl } from "@material-ui/core";
 import { apiurl, fetchOptions } from "../utils/fetchSetting";
@@ -57,7 +54,10 @@ const Bottom = styled.div`
 function Login() {
   const [showlog, setShowlog] = useState("signin");
   const [resetid, setResetid] = useState("");
-  const [showSpin, setShowSpin] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  const pwdErMsg =
+    "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
 
   const changeState = () => {
     setShowlog("signup");
@@ -75,17 +75,17 @@ function Login() {
   const signupnUser = async (e) => {
     e.preventDefault();
 
-    setShowSpin(true);
+    setLoader(true);
 
     const [password, passwordRepeat] = [...e.target.querySelectorAll("input")]
       .filter((e) => e.name.match(/user\[((password)|(password-repeat))\]/gi))
       .map((e) => e.value);
 
     try {
-      if (password !== passwordRepeat) throw "Passwords Don't Match";
+      if (!isValidPassword(password) || !isValidPassword(passwordRepeat))
+        throw Error(pwdErMsg);
 
-      if (!isValidPassword(password))
-        throw "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
+      if (password !== passwordRepeat) throw Error("Passwords Don't Match");
 
       const body = [...e.target.querySelectorAll("input")]
         .filter((e) => e.name.match(/user\[((name)|(email)|(password))\]/gi))
@@ -99,20 +99,20 @@ function Login() {
         fetchOptions("POST", body)
       );
 
-      if (res.status !== 200) throw (await res.json()).error;
+      if (res.status !== 200) throw Error((await res.json()).error);
 
-      Notify("Login Success", "Welcome");
-    } catch (error) {
-      Notify("Error", error, "danger");
+      Notify("Wlcome to FreePostSEO 💖", "Now you can access all our tools");
+    } catch ({ message }) {
+      Notify("Error", message, "danger");
     } finally {
-      setShowSpin(false);
+      setLoader(false);
     }
   };
 
   const loginUser = async (e) => {
     e.preventDefault();
 
-    setShowSpin(true);
+    setLoader(true);
 
     const [password] = [...e.target.querySelectorAll("input")]
       .filter((e) => e.name.match(/user\[(password)\]/gi))
@@ -120,7 +120,9 @@ function Login() {
 
     try {
       if (!isValidPassword(password))
-        throw "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
+        throw Error(
+          "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
+        );
 
       const body = [...e.target.querySelectorAll("input")]
         .filter((e) => e.name.match(/user\[((email)|(password))\]/gi))
@@ -134,20 +136,20 @@ function Login() {
         fetchOptions("POST", body)
       );
 
-      if (res.status !== 200) throw (await res.json()).error;
+      if (res.status !== 200) throw Error((await res.json()).error);
 
-      Notify("Login Success", "Welcome");
-    } catch (error) {
-      Notify("Error", error, "danger");
+      Notify("Welcome Back 🤗", "Continue improving your site with our tools");
+    } catch ({ message }) {
+      Notify("Error", message, "danger");
     } finally {
-      setShowSpin(false);
+      setLoader(false);
     }
   };
 
   const forgotpassword = async (e) => {
     e.preventDefault();
 
-    setShowSpin(true);
+    setLoader(true);
 
     const body = [...new FormData(e.target).entries()]
       .map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`)
@@ -159,22 +161,22 @@ function Login() {
         fetchOptions("POST", body)
       );
 
-      if (res.status !== 200) throw (await res.json()).error;
+      if (res.status !== 200) throw Error((await res.json()).error);
 
       setShowlog("verify");
 
-      Notify("OTP Sent", "Check Your Mail", "info");
-    } catch (error) {
-      Notify("Error", error, "danger");
+      Notify("OTP Sent Successfullt", "Check your mail");
+    } catch ({ message }) {
+      Notify("Error", message, "danger");
     } finally {
-      setShowSpin(false);
+      setLoader(false);
     }
   };
 
   const verifyOtp = async (e) => {
     e.preventDefault();
 
-    setShowSpin(true);
+    setLoader(true);
 
     const body = [...new FormData(e.target).entries()]
       .map((e) => `${encodeURIComponent(e[0])}=${encodeURIComponent(e[1])}`)
@@ -186,33 +188,35 @@ function Login() {
         fetchOptions("POST", body)
       );
 
-      if (res.status !== 200) throw (await res.json()).error;
+      if (res.status !== 200) throw Error((await res.json()).error);
 
       setResetid((await res.json()).resetid);
       setShowlog("reset");
 
-      Notify("OTP Verified", "", "info");
-    } catch (error) {
-      Notify("Error", error, "danger");
+      Notify("OTP Verified", "Now you can reset your password");
+    } catch ({ message }) {
+      Notify("Error", message, "danger");
     } finally {
-      setShowSpin(false);
+      setLoader(false);
     }
   };
 
   const reset = async (e) => {
     e.preventDefault();
 
-    setShowSpin(true);
+    setLoader(true);
 
     const [password, passwordRepeat] = [...e.target.querySelectorAll("input")]
       .filter((e) => e.name.match(/(password)|(password-repeat)/gi))
       .map((e) => e.value);
 
     try {
-      if (password !== passwordRepeat) throw "Passwords Don't Match";
+      if (!isValidPassword(password) || !isValidPassword(passwordRepeat))
+        throw Error(
+          "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters"
+        );
 
-      if (!isValidPassword(password))
-        throw "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
+      if (password !== passwordRepeat) throw Error("Passwords Don't Match");
 
       const body = [...e.target.querySelectorAll("input")]
         .filter((e) => e.name.match(/^password$/gi))
@@ -226,15 +230,18 @@ function Login() {
         fetchOptions("POST", body)
       );
 
-      if (res.status !== 200) throw (await res.json()).error;
+      if (res.status !== 200) throw Error((await res.json()).error);
 
       setShowlog("signin");
 
-      Notify("Reset Success", "Password Changed Sucessfully");
-    } catch (error) {
-      Notify("Error", error, "danger");
+      Notify(
+        "Password Changed Successfully",
+        "Now you can login with your updated password"
+      );
+    } catch ({ message }) {
+      Notify("Error", message, "danger");
     } finally {
-      setShowSpin(false);
+      setLoader(false);
     }
   };
 
@@ -246,7 +253,6 @@ function Login() {
         {showlog === "forgot" && <img src={fpSvg} alt="" height="300px" />}
         {showlog === "verify" && <img src={voSvg} alt="" height="300px" />}
         {showlog === "reset" && <img src={rSvg} alt="" height="300px" />}
-        {showlog === "success" && <img src={suSvg} alt="" height="300px" />}
       </LeftSide>
       <RightSide>
         {showlog === "signin" && (
@@ -275,7 +281,7 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
-                  {showSpin && (
+                  {loader && (
                     <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
                   )}
                   Login
@@ -335,7 +341,7 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
-                  {showSpin && (
+                  {loader && (
                     <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
                   )}
                   Sign Up
@@ -373,7 +379,7 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
-                  {showSpin && (
+                  {loader && (
                     <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
                   )}
                   Send OTP
@@ -411,7 +417,7 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
-                  {showSpin && (
+                  {loader && (
                     <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
                   )}
                   Reset
@@ -454,7 +460,7 @@ function Login() {
                   color="primary"
                   style={{ paddingInline: "10px" }}
                 >
-                  {showSpin && (
+                  {loader && (
                     <Circle color="#ffffff" style={{ paddingRight: "10px" }} />
                   )}
                   Confirm
@@ -470,16 +476,6 @@ function Login() {
                 Cancel
               </Button>
             </Bottom>
-          </>
-        )}
-        {showlog === "success" && (
-          <>
-            <SignTab>
-              <h2>Welcome "User Name"</h2>
-            </SignTab>
-            <p style={{ alignSelf: "center", justifyContent: "center" }}>
-              We would like to Provide you with best features for Free🎉
-            </p>
           </>
         )}
       </RightSide>

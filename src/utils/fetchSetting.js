@@ -1,6 +1,6 @@
-const apiurl = "https://fpseo.herokuapp.com";
+const apiurl = "https://api.freepostseo.com";
 
-const fetchOptions = (method, body) => ({
+const fetchOptions = (method, body = null) => ({
   method,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",

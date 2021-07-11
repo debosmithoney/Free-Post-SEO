@@ -17,7 +17,7 @@ function PopUp(props) {
       >
         X
       </Button>
-      <DialogContent style={{}}>{children}</DialogContent>
+      <DialogContent>{children}</DialogContent>
     </Dialog>
   );
 }

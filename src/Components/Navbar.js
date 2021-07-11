@@ -126,6 +126,7 @@ const NavMenuLinks = styled(LinkS)`
 const Navbar = ({ toggle }) => {
   const [navbar, setNavbar] = useState("transparent");
   const [openMenu, setOpenMenu] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
 
   const ChangeBackground = () => {
     if (window.scrollY >= 128) {
@@ -135,12 +136,11 @@ const Navbar = ({ toggle }) => {
     }
   };
 
-  window.addEventListener("scroll", ChangeBackground);
-
-  const [openPopup, setOpenPopup] = useState(false);
   const handleClose = () => {
     setOpenMenu(false);
   };
+
+  window.addEventListener("scroll", ChangeBackground);
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
