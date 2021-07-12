@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Link as LinkR } from "react-router-dom";
 import { Link as LinkS } from "react-scroll";
 import PopUp from "./PopUp";
@@ -37,32 +37,23 @@ const Nav = styled.div`
   &:active {
     background: "#6C63FF";
   }
-
-  @media screen and (max-width: 992px) {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    background-color: #5f0a87;
-  }
 `;
 
 const Toggler = styled.div`
   display: none;
   cursor: pointer;
-  position: absolute;
-  right: 1.25rem;
+  margin-right: 10px;
   font-size: 32px;
-  align-self: center;
+  z-index: 100;
 
   @media screen and (max-width: 992px) {
-    display: block;
+    display: inline-flex;
     color: #f5f5f5;
   }
 `;
 
 const Banner = styled(LinkR)`
-  margin-left: 30px;
-  padding-inline: 10px 20px;
+  margin-left: 40px;
   color: #f5f5f5;
   cursor: pointer;
   text-decoration: none;
@@ -101,21 +92,19 @@ const Banner = styled(LinkR)`
 const NavMenu = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   transition: 200ms ease-in;
 
   @media screen and (max-width: 992px) {
-    justify-content: space-around;
+    flex-direction: column;
     background-color: #5f0a87;
     position: fixed;
-    top: -1000%;
+    top: 125%;
     right: 0;
     height: 100vh;
-    padding-block: 25vh;
     width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    padding-block: 25vh;
   }
 `;
 
@@ -166,11 +155,10 @@ const NavMenuLinks = styled(LinkS)`
 const ConfLogout = styled.div`
   display: flex;
   flex-direction: column;
-  padding:2rem;
+  padding: 2rem;
   align-items: center;
   justify-content: space-between;
 `;
-
 
 const Navbar = () => {
   const classes = useStyles();
@@ -222,12 +210,12 @@ const Navbar = () => {
             FreePostSEO
             <p>Empowering College Students</p>
           </h1>
-          <Toggler onClick={() => setOpenMenu(!openMenu)}>
-            {openMenu ? <FaTimes /> : <FaBars />}
-          </Toggler>
         </Banner>
+        <Toggler onClick={() => setOpenMenu(!openMenu)}>
+          {openMenu ? <FaTimes /> : <FaBars />}
+        </Toggler>
         <NavMenu
-          style={openMenu ? { top: "0" } : { top: "-1000%" }}
+          style={{ top: `${openMenu ? "0" : "125%"}` }}
           onClick={() => setOpenMenu(false)}
         >
           {!openMenu && openDropdown && (
@@ -288,12 +276,12 @@ const Navbar = () => {
           />
         </PopUp>
         <PopUp openPopup={closePopup} setOpenPopup={setClosePopup}>
-        <ConfLogout className={classes.root}>
-        <h2 >Do you confirm?</h2>
-        <Button variant="contained" color="primary" onClick={logout}>
-          Logout
-        </Button>
-        </ConfLogout>
+          <ConfLogout className={classes.root}>
+            <h2>Do you confirm?</h2>
+            <Button variant="contained" color="primary" onClick={logout}>
+              Logout
+            </Button>
+          </ConfLogout>
         </PopUp>
       </Nav>
     </ClickAwayListener>
