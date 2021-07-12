@@ -34,7 +34,7 @@ const MenuLink = styled(LinkS)`
   }
 `;
 
-function Drop({ background, toggler }) {
+function Drop({ background, toggle }) {
   return (
     <Menu style={{ background: `${background}` }}>
       {dropData.map((item, index) => (
@@ -43,7 +43,7 @@ function Drop({ background, toggler }) {
           key={index}
           smooth={true}
           duration={1000}
-          onClick={() => toggler((prev) => !prev)}
+          onClick={() => toggle((prev) => !prev)}
         >
           {item.title}
         </MenuLink>
