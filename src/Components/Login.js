@@ -51,17 +51,13 @@ const Bottom = styled.div`
   cursor: pointer;
 `;
 
-function Login() {
+function Login({ setOpenPopup, setLoggedIn, setUser }) {
   const [showlog, setShowlog] = useState("signin");
   const [resetid, setResetid] = useState("");
   const [loader, setLoader] = useState(false);
 
   const pwdErMsg =
     "Password must contain at least one uppercase, lowercase, number, symbol each and should be at least 8 characters";
-
-  const changeState = () => {
-    setShowlog("signup");
-  };
 
   const isValidPassword = (password) => {
     const passwordRegExp =
@@ -101,7 +97,16 @@ function Login() {
 
       if (res.status !== 200) throw Error((await res.json()).error);
 
-      Notify("Wlcome to FreePostSEO 💖", "Now you can access all our tools");
+      const { user } = await res.json();
+
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      setOpenPopup(false);
+      setLoggedIn(true);
+      setUser(user);
+
+      Notify("Welcome to FreePostSEO 💖", "Now you can access all our tools");
     } catch ({ message }) {
       Notify("Error", message, "danger");
     } finally {
@@ -138,7 +143,19 @@ function Login() {
 
       if (res.status !== 200) throw Error((await res.json()).error);
 
-      Notify("Welcome Back 🤗", "Continue improving your site with our tools");
+      const { user } = await res.json();
+
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      setOpenPopup(false);
+      setLoggedIn(true);
+      setUser(user);
+
+      Notify(
+        `Welcome Back ${user.name} 🤗`,
+        "Continue improving your site with our tools"
+      );
     } catch ({ message }) {
       Notify("Error", message, "danger");
     } finally {
@@ -296,7 +313,7 @@ function Login() {
               >
                 Forgot Password
               </Button>
-              <Button color="primary" onClick={changeState}>
+              <Button color="primary" onClick={() => setShowlog("signup")}>
                 Sign Up
               </Button>
             </Bottom>

@@ -1,6 +1,6 @@
 const apiurl = "https://api.freepostseo.com";
 
-const fetchOptions = (method, body = null) => ({
+const fetchOptions = (method = "POST", body = null) => ({
   method,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",

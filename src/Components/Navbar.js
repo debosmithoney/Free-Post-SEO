@@ -8,6 +8,8 @@ import { FaBars } from "react-icons/fa";
 import logo from "../Svg/logo.png";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Drop from "./Drop";
+import Notify from "./Notify";
+import { apiurl, fetchOptions } from "../utils/fetchSetting";
 
 const Nav = styled.div`
   margin: 0;
@@ -127,23 +129,41 @@ const Navbar = ({ toggle }) => {
   const [navbar, setNavbar] = useState("transparent");
   const [openMenu, setOpenMenu] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true" ? true : false
+  );
+  const [user, setUser] = useState(
+    isLoggedIn ? JSON.parse(localStorage.getItem("user")) : {}
+  );
 
-  const ChangeBackground = () => {
-    if (window.scrollY >= 128) {
-      setNavbar("#5f0a87");
-    } else {
-      setNavbar("transparent");
+  const logout = async () => {
+    try {
+      const res = await fetch(`${apiurl}/users/logout`, fetchOptions("POST"));
+
+      if (res.status !== 200) throw Error((await res.json()).error);
+
+      localStorage.setItem("isLoggedIn", false);
+      localStorage.removeItem("user");
+
+      setLoggedIn(false);
+      setUser({});
+
+      Notify("Successfully Logged Out", "Bye 👋 See you soon!");
+    } catch ({ message }) {
+      Notify("Error Encountered", message, "danger");
     }
   };
 
-  const handleClose = () => {
-    setOpenMenu(false);
-  };
-
-  window.addEventListener("scroll", ChangeBackground);
+  window.addEventListener("scroll", () =>
+    setNavbar(window.scrollY >= 128 ? "#5f0a87" : "transparent")
+  );
 
   return (
-    <ClickAwayListener onClickAway={handleClose}>
+    <ClickAwayListener
+      onClickAway={() => {
+        setOpenMenu(false);
+      }}
+    >
       <Nav style={{ background: `${navbar}` }}>
         <Banner to="/" smooth={true} duration={1000}>
           <img src={logo} alt="logo" />
@@ -170,12 +190,20 @@ const Navbar = ({ toggle }) => {
           </NavMenuLinks>
           {openMenu && <Drop background={navbar} toggler={setOpenMenu} />}
 
-          <NavMenuLinks onClick={() => setOpenPopup(true)}>
-            Login / Register
-          </NavMenuLinks>
+          {isLoggedIn ? (
+            <NavMenuLinks onClick={logout}>Logout</NavMenuLinks>
+          ) : (
+            <NavMenuLinks onClick={() => setOpenPopup(true)}>
+              Login / Register
+            </NavMenuLinks>
+          )}
         </NavMenu>
         <PopUp openPopup={openPopup} setOpenPopup={setOpenPopup}>
-          <Login />
+          <Login
+            setOpenPopup={setOpenPopup}
+            setLoggedIn={setLoggedIn}
+            setUser={setUser}
+          />
         </PopUp>
       </Nav>
     </ClickAwayListener>
