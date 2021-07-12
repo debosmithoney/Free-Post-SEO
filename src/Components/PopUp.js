@@ -12,7 +12,7 @@ function PopUp(props) {
     <Dialog open={openPopup} maxWidth="md" onclose={handleClose}>
       <Button
         color="secondary"
-        style={{ position: "absolute", right: "10px", top: "10px" }}
+        style={{ position: "absolute", right: "10px", top: "10px", fontStyle:"bold" }}
         onClick={() => setOpenPopup(false)}
       >
         X

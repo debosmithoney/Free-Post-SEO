@@ -10,6 +10,15 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Drop from "./Drop";
 import Notify from "./Notify";
 import { apiurl, fetchOptions } from "../utils/fetchSetting";
+import { Button, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 const Nav = styled.div`
   margin: 0;
@@ -154,11 +163,22 @@ const NavMenuLinks = styled(LinkS)`
   }
 `;
 
+const ConfLogout = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding:2rem;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+
 const Navbar = () => {
+  const classes = useStyles();
   const [navbar, setNavbar] = useState("transparent");
   const [openMenu, setOpenMenu] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
+  const [closePopup, setClosePopup] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true" ? true : false
   );
@@ -175,6 +195,7 @@ const Navbar = () => {
       localStorage.setItem("isLoggedIn", false);
       localStorage.removeItem("user");
 
+      setClosePopup(false);
       setLoggedIn(false);
       setUser({});
 
@@ -245,12 +266,7 @@ const Navbar = () => {
           </NavMenuLinks>
 
           {isLoggedIn ? (
-            <NavMenuLinks
-              onClick={() => {
-                logout();
-                setOpenMenu(false);
-              }}
-            >
+            <NavMenuLinks onClick={() => setClosePopup(true)}>
               Logout
             </NavMenuLinks>
           ) : (
@@ -270,6 +286,14 @@ const Navbar = () => {
             setLoggedIn={setLoggedIn}
             setUser={setUser}
           />
+        </PopUp>
+        <PopUp openPopup={closePopup} setOpenPopup={setClosePopup}>
+        <ConfLogout className={classes.root}>
+        <h2 >Do you confirm?</h2>
+        <Button variant="contained" color="primary" onClick={logout}>
+          Logout
+        </Button>
+        </ConfLogout>
         </PopUp>
       </Nav>
     </ClickAwayListener>
