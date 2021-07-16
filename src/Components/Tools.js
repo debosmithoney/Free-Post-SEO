@@ -9,6 +9,7 @@ import NDSvg from "../Svg/undraw_No_data_re_kwbl.svg";
 import { makeStyles } from "@material-ui/core/styles";
 import { Circle } from "better-react-spinkit";
 import { apiurl, fetchOptions } from "../utils/fetchSetting";
+import Notify from "./Notify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -128,8 +129,10 @@ function Tools() {
       input.setAttribute("readonly", "true");
 
       setShortenerButtons(true);
+
+      Notify("URL Shortened 📌", "Now you can use this short URL");
     } catch (error) {
-      console.error(error);
+      Notify("Failed to shorten the URL 😟", "Sorry for inconvenience", "danger");
     } finally {
       setShortLoad(false);
     }
@@ -157,8 +160,9 @@ function Tools() {
 
       setDataScrap(scrapData);
       setScrapperButtons(true);
+      Notify("Page Bookmarked 🔍", "Now you can have a glimpse of the page");
     } catch (error) {
-      console.error(error);
+      Notify("Failed to get your Page 😟", "Sorry for inconvenience.", "danger");
     } finally {
       setScrapLoad(false);
     }
@@ -197,8 +201,9 @@ function Tools() {
 
       audio.click();
       audio.remove();
+      Notify("Download Successful 🚀", "The YouTube MP3 download was successful");
     } catch (error) {
-      console.error(error);
+      Notify("Download Failed 😟", "Sorry for inconvenience.", "danger");
     } finally {
       input.removeAttribute("disabled");
       button.removeAttribute("disabled");
@@ -212,11 +217,13 @@ function Tools() {
     document.execCommand("copy");
     setCopy("Copied");
     setTimeout(() => setCopy("Copy Link"), 2000);
+    Notify("Link Copied", "Paste where you like it");
   };
 
   const redirect = () => {
     const url = document.querySelector("input[id=shorturl]").value;
     window.open(`${url.startsWith("http") ? "" : "http://"}${url}`);
+    Notify("Link Redirected", "Opening in new Page");
   };
 
   return (
