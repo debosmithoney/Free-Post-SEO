@@ -9,7 +9,7 @@ function PopUp(props) {
   };
 
   return (
-    <Dialog open={openPopup} maxWidth="md" onclose={handleClose}>
+    <Dialog open={openPopup} maxWidth="md" onclose={handleClose} disableScrollLock={true}>
       <Button
         color="secondary"
         style={{ position: "absolute", right: "10px", top: "10px", fontStyle:"bold" }}

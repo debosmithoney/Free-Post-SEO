@@ -94,11 +94,11 @@ const NavMenu = styled.div`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  transition: 200ms ease-in;
 
   @media screen and (max-width: 992px) {
     flex-direction: column;
     background-color: #5f0a87;
+    transition: 200ms ease-in;
     position: fixed;
     top: 125%;
     right: 0;
@@ -160,19 +160,14 @@ const ConfLogout = styled.div`
   justify-content: space-between;
 `;
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const { isLoggedIn, setLoggedIn, setUser, openPopup, setOpenPopup } = props;
+
   const classes = useStyles();
   const [navbar, setNavbar] = useState("transparent");
   const [openMenu, setOpenMenu] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [openPopup, setOpenPopup] = useState(false);
-  const [closePopup, setClosePopup] = useState(false);
-  const [isLoggedIn, setLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") === "true" ? true : false
-  );
-  const [user, setUser] = useState(
-    isLoggedIn ? JSON.parse(localStorage.getItem("user")) : {}
-  );
+  const [logoutPopup, setLogoutPopup] = useState(false);
 
   const logout = async () => {
     try {
@@ -180,10 +175,10 @@ const Navbar = () => {
 
       if (res.status !== 200) throw Error((await res.json()).error);
 
-      localStorage.setItem("isLoggedIn", false);
+      document.cookie = `isLoggedIn=;Expires=${new Date().toGMTString()}`;
       localStorage.removeItem("user");
 
-      setClosePopup(false);
+      setLogoutPopup(false);
       setLoggedIn(false);
       setUser({});
 
@@ -215,7 +210,7 @@ const Navbar = () => {
           {openMenu ? <FaTimes /> : <FaBars />}
         </Toggler>
         <NavMenu
-          style={{ top: `${openMenu ? "0" : "125%"}` }}
+          style={openMenu ? { top: "0" } : {}}
           onClick={() => setOpenMenu(false)}
         >
           {!openMenu && openDropdown && (
@@ -254,7 +249,12 @@ const Navbar = () => {
           </NavMenuLinks>
 
           {isLoggedIn ? (
-            <NavMenuLinks onClick={() => setClosePopup(true)}>
+            <NavMenuLinks
+              onClick={() => {
+                setOpenMenu(false);
+                setLogoutPopup(true);
+              }}
+            >
               Logout
             </NavMenuLinks>
           ) : (
@@ -275,7 +275,7 @@ const Navbar = () => {
             setUser={setUser}
           />
         </PopUp>
-        <PopUp openPopup={closePopup} setOpenPopup={setClosePopup}>
+        <PopUp openPopup={logoutPopup} setOpenPopup={setLogoutPopup}>
           <ConfLogout className={classes.root}>
             <h2>Do you confirm?</h2>
             <Button variant="contained" color="primary" onClick={logout}>

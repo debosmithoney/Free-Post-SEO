@@ -92,7 +92,7 @@ const ScrapImg = styled.div`
   }
 `;
 
-function Tools() {
+function Tools({ isLoggedIn, setOpenPopup }) {
   const classes = useStyles();
 
   const [shortenerButtons, setShortenerButtons] = useState(false);
@@ -102,6 +102,13 @@ function Tools() {
   const [shortLoad, setShortLoad] = useState(false);
   const [scrapLoad, setScrapLoad] = useState(false);
   const [downLoad, setDownLoad] = useState(false);
+
+  const loginFirst = (e) => {
+    e.preventDefault();
+
+    setOpenPopup(true);
+    Notify("Login Required", "Please Login to use our tools", "info");
+  };
 
   const shortener = async (e) => {
     e.preventDefault();
@@ -132,7 +139,11 @@ function Tools() {
 
       Notify("URL Shortened 📌", "Now you can use this short URL");
     } catch (error) {
-      Notify("Failed to shorten the URL 😟", "Sorry for inconvenience", "danger");
+      Notify(
+        "Failed to shorten the URL 😟",
+        "Sorry for inconvenience",
+        "danger"
+      );
     } finally {
       setShortLoad(false);
     }
@@ -162,7 +173,11 @@ function Tools() {
       setScrapperButtons(true);
       Notify("Page Bookmarked 🔍", "Now you can have a glimpse of the page");
     } catch (error) {
-      Notify("Failed to get your Page 😟", "Sorry for inconvenience.", "danger");
+      Notify(
+        "Failed to get your Page 😟",
+        "Sorry for inconvenience.",
+        "danger"
+      );
     } finally {
       setScrapLoad(false);
     }
@@ -201,7 +216,10 @@ function Tools() {
 
       audio.click();
       audio.remove();
-      Notify("Download Successful 🚀", "The YouTube MP3 download was successful");
+      Notify(
+        "Download Successful 🚀",
+        "The YouTube MP3 download was successful"
+      );
     } catch (error) {
       Notify("Download Failed 😟", "Sorry for inconvenience.", "danger");
     } finally {
@@ -232,7 +250,7 @@ function Tools() {
         <ColumnLeft>
           <h1>URL Shortener</h1>
           <p>Use it to Reduce it 😉</p>
-          <form onSubmit={shortener}>
+          <form onSubmit={isLoggedIn ? shortener : loginFirst}>
             <FormControl>
               <TextField
                 id="shorturl"
@@ -316,7 +334,7 @@ function Tools() {
             <ColumnLeft reverse="false">
               <h1>Bookmarker 🔎</h1>
               <p>Get the Glimpse of the Webpage</p>
-              <form onSubmit={scrapurl}>
+              <form onSubmit={isLoggedIn ? scrapurl : loginFirst}>
                 <FormControl>
                   <TextField
                     id="scrapurl"
@@ -403,7 +421,7 @@ function Tools() {
         <ColumnLeft>
           <h1>YouTube Song Downloader</h1>
           <p>Get the Trending Songs 🕺💃</p>
-          <form onSubmit={download}>
+          <form onSubmit={isLoggedIn ? download : loginFirst}>
             <FormControl>
               <TextField
                 id="yturl"

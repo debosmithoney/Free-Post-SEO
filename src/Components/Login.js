@@ -68,6 +68,18 @@ function Login({ setOpenPopup, setLoggedIn, setUser }) {
     return false;
   };
 
+  const getExpiry = () => {
+    const today = new Date();
+
+    today.setDate(today.getDate() + 1);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+
+    return today.toGMTString();
+  };
+
   const signupnUser = async (e) => {
     e.preventDefault();
 
@@ -99,7 +111,7 @@ function Login({ setOpenPopup, setLoggedIn, setUser }) {
 
       const { user } = await res.json();
 
-      localStorage.setItem("isLoggedIn", true);
+      document.cookie = `isLoggedIn=true;Expires=${getExpiry()}`;
       localStorage.setItem("user", JSON.stringify(user));
 
       setOpenPopup(false);
@@ -145,7 +157,7 @@ function Login({ setOpenPopup, setLoggedIn, setUser }) {
 
       const { user } = await res.json();
 
-      localStorage.setItem("isLoggedIn", true);
+      document.cookie = `isLoggedIn=true;Expires=${getExpiry()}`;
       localStorage.setItem("user", JSON.stringify(user));
 
       setOpenPopup(false);
@@ -153,7 +165,7 @@ function Login({ setOpenPopup, setLoggedIn, setUser }) {
       setUser(user);
 
       Notify(
-        `Welcome Back ${user.name} 🤗`,
+        `Welcome Back ${user.name.split(" ")[0]} 🤗`,
         "Continue improving your site with our tools"
       );
     } catch ({ message }) {
