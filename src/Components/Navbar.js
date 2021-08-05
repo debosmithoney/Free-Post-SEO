@@ -108,6 +108,14 @@ const NavMenu = styled.div`
   }
 `;
 
+const NavDropdown = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 const NavMenuLinks = styled(LinkS)`
   color: #f5f5f5;
   display: flex;
@@ -213,10 +221,6 @@ const Navbar = (props) => {
           style={openMenu ? { top: "0" } : {}}
           onClick={() => setOpenMenu(false)}
         >
-          {!openMenu && openDropdown && (
-            <Drop background={navbar} toggle={setOpenDropdown} />
-          )}
-
           <NavMenuLinks
             to="home"
             smooth={true}
@@ -226,18 +230,24 @@ const Navbar = (props) => {
             Home
           </NavMenuLinks>
 
-          <NavMenuLinks
-            smooth={true}
-            duration={1000}
-            onClick={() =>
-              openMenu
-                ? setOpenMenu(!openMenu)
-                : setOpenDropdown((prev) => !prev)
-            }
-            to={openMenu ? "tools" : ""}
-          >
-            Tools
-          </NavMenuLinks>
+          <NavDropdown>
+            <NavMenuLinks
+              smooth={true}
+              duration={1000}
+              onClick={() =>
+                openMenu
+                  ? setOpenMenu(!openMenu)
+                  : setOpenDropdown((prev) => !prev)
+              }
+              to={openMenu ? "tools" : ""}
+            >
+              Tools
+            </NavMenuLinks>
+
+            {!openMenu && openDropdown && (
+              <Drop background={navbar} toggle={setOpenDropdown} />
+            )}
+          </NavDropdown>
 
           <NavMenuLinks
             to="footer"

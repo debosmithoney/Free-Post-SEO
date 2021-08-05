@@ -7,12 +7,12 @@ const Menu = styled.div`
   background: #5f0a87;
   width: 200px;
   position: absolute;
-  top: 80px;
+  bottom: 0;
+  transform: translateY(100%);
   list-style: none;
   text-align: center;
   border-radius: 0 0 15px 15px;
   transition: 200ms ease-in;
-  transform: translateX(47.5px);
 `;
 
 const MenuLink = styled(LinkS)`
