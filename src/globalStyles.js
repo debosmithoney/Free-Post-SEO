@@ -19,6 +19,17 @@ const GlobalStyle = createGlobalStyle`
     background-attachment: fixed;
     background-size: contain;
      overflow-x: hidden;
+     ::-webkit-scrollbar{
+         width:10px;
+     }
+     ::-webkit-scrollbar-track{
+         background:#5f0a87;
+     }
+     ::-webkit-scrollbar-thumb{
+         background: #6c63ff;
+         border-radius:25px;
+     }
+    
  }
 `;
 

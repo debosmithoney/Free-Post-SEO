@@ -7,9 +7,9 @@ import {
 } from "react-router-dom";
 import { Circle } from "better-react-spinkit";
 
-import "./App.css";
 import ScrollToTop from "./Components/ScrollToTop";
 import Home from "./Pages/Home";
+import Bookmarker from "./Pages/Bookmarker";
 import styled from "styled-components";
 import SVG404 from "../src/Svg/undraw_page_not_found_su7k.svg";
 
@@ -98,6 +98,7 @@ function App() {
 			<Switch>
 				<Route path="/" exact component={Home} />
 				<Route path="/url/:id" exact component={GetURL} />
+				<Route path="/bookmarker" exact component={Bookmarker} />
 				<Route path="/404" exact component={Error404} />
 				<Route path="*" component={() => <Redirect to="/404" />} />
 			</Switch>
