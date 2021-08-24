@@ -25,8 +25,8 @@ const Section = styled.div`
   display: grid;
   place-items: center;
   grid-template-columns: 1fr 256px;
-  @media screen and (max-width: 768px) {
-    grid-template-columns: 1fr 0;
+  @media screen and (max-width: 992px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -40,7 +40,7 @@ const Container = styled.div`
   /* grid-template-rows: 500px; */
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
-    padding:0;
+    padding: 0;
   }
 `;
 const ColumnLeft = styled.div`
@@ -64,7 +64,7 @@ const ColumnLeft = styled.div`
     text-align: center;
   }
   @media screen and (max-width: 768px) {
-    height:50vh;
+    height: 50vh;
   }
 `;
 
@@ -78,7 +78,7 @@ const ColumnRight = styled.div`
 
   @media screen and (max-width: 768px) {
     order: 1;
-    height:50vh;
+    height: 50vh;
   }
 `;
 
@@ -92,7 +92,7 @@ const ScrapImg = styled.div`
     height: auto;
     width: 100%;
     border-radius: 25px;
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
       width: 70%;
     }
   }
@@ -107,8 +107,24 @@ const LinkNav = styled.nav`
   height: 100vh;
   background-color: #22042f;
   color: white;
-  @media screen and (max-width: 768px) {
-    display: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #5f0a87;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #6c63ff;
+    border-radius: 25px;
+  }
+  @media screen and (max-width: 992px) {
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+    padding-top: 80px;
   }
 `;
 const BackButton = styled(LinkR)`
@@ -127,9 +143,9 @@ const BackButton = styled(LinkR)`
   :active {
     background: yellow;
   }
-  @media screen and (max-width: 768px) {
-    top: 60px;
-    left: 10px;
+  @media screen and (max-width: 992px) {
+    top: 30px;
+    left: 30px;
     padding: 5px 15px;
   }
 `;
@@ -141,12 +157,12 @@ const Drop = styled.div`
   border-radius: 25px;
   color: #000;
   z-index: 100;
-  top: 60px;
+  top: 30px;
   right: 20px;
   :hover {
-    color: yellow;
+    color: #6c63ff;
   }
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 992px) {
     display: none;
   }
 `;
@@ -165,6 +181,10 @@ const Link = styled.div`
   :active {
     background: yellow;
   }
+
+  @media screen and (max-width: 992px) {
+    font-size: 24px;
+  }
 `;
 
 const Search = styled.div`
@@ -172,6 +192,8 @@ const Search = styled.div`
   align-items: center;
   padding: 20px 10px;
   border-radius: 2px;
+  top: 0;
+  position: sticky;
 `;
 
 const SearchInput = styled.input`
@@ -182,24 +204,9 @@ const SearchInput = styled.input`
   padding-left: 10px;
   font-size: 16px;
 `;
-const Content = styled.div`
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  z-index: 1;
-  background: #5f0a87;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  flex-direction: column;
-  text-align: center;
-  @media screen and (min-width: 768px) {
-    display: none;
-  }
-`;
+
 const Bookmarker = () => {
-  const [iconChange, setIconChange] = useState(false);
+  const [iconChange, setIconChange] = useState(true);
   return (
     <>
       <GlobalStyle />
@@ -207,20 +214,12 @@ const Bookmarker = () => {
       <Section>
         <BackButton to="/">Go Back</BackButton>
         <Drop onClick={() => setIconChange(!iconChange)}>
-          {iconChange ? <MenuOpenIcon style={{fontSize: '24px'}}/> : <CloseIcon style={{fontSize: '24px'}}/>}
+          {iconChange ? (
+            <MenuOpenIcon style={{ fontSize: "24px" }} />
+          ) : (
+            <CloseIcon style={{ fontSize: "24px" }} />
+          )}
         </Drop>
-        {!iconChange && (
-          <Content onClick={() => setIconChange(!iconChange)}>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-            <Link style={{ fontSize: '24px'}}>Name</Link>
-          </Content>
-        )}
         <Container>
           <ColumnLeft>
             <h1 style={{ fontSize: "24px" }}>
@@ -251,23 +250,48 @@ const Bookmarker = () => {
             </ScrapImg>
           </ColumnRight>
         </Container>
-
-        <LinkNav>
-          <Search>
-            <SearchInput placeholder="Search Links" />
-          </Search>
-          <Link>
-            https://en.savefrom.net/20/#url=http://youtube.com/&utm_source=youtube.com&utm_medium=short_domains&utm_campaign=ssyoutube.com&a_ts=1619286784.922
-          </Link>
-          <Link>Name</Link>
-          <Link>Name</Link>
-          <Link>Name</Link>
-          <Link>Name</Link>
-          <Link>Name</Link>
-          <Link>Name</Link>
-          <Link>Name</Link>
-          <Link>Name</Link>
-        </LinkNav>
+        {iconChange && (
+          <LinkNav>
+            <Search>
+              <SearchInput placeholder="Search Links" />
+            </Search>
+            <Link>
+              https://en.savefrom.net/20/#url=http://youtube.com/&utm_source=youtube.com&utm_medium=short_domains&utm_campaign=ssyoutube.com&a_ts=1619286784.922
+            </Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+            <Link>Name</Link>
+          </LinkNav>
+        )}
       </Section>
     </>
   );
